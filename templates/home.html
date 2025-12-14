@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <title>HeartNote AI — Creative Writer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --accent: #ff4d6d;
+      --accent-dark: #e63950;
+      --bg: #ffffff;
+      --text: #222222;
+      --card: #fff;
+      --muted: #f9f9f9;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0d0d0d;
+        --text: #f5f5f5;
+        --card: #1a1a1a;
+        --muted: #141414;
+        --accent: #ff668a;
+        --accent-dark: #ff4d6d;
+      }
+      body { background: var(--bg); color: var(--text); }
+      header { background: var(--card); border-bottom: 1px solid rgba(255,255,255,0.05); }
+      .feature { background: var(--card); box-shadow: 0 4px 12px rgba(255, 77, 109, 0.08); }
+      .journey-step { background: var(--muted); border-left: 6px solid var(--accent); }
+      footer { background: var(--accent-dark); }
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 8%;
+      background: var(--card);
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .logo {
+      font-weight: 700;
+      font-size: 1.4rem;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .cta-btn {
+      background: var(--accent);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 10px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .cta-btn:hover {
+      background: var(--accent-dark);
+      transform: scale(1.05);
+    }
+
+    .modal {
+      display: none; position: fixed; z-index: 1000; left: 0; top: 0;
+      width: 100%; height: 100%; background: rgba(0,0,0,0.6);
+      justify-content: center; align-items: center;
+    }
+    .modal-content {
+      background: var(--card); padding: 30px; border-radius: 16px; width: 90%; max-width: 400px;
+      text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+    .modal-content h2 {color: var(--accent); margin-bottom: 20px;}
+    .modal-content input {
+      width: 100%; padding: 10px; margin: 8px 0;
+      border: 1px solid #ccc; border-radius: 8px;
+    }
+    .modal-content button {
+      background: var(--accent); color: #fff; border: none; padding: 10px 20px;
+      border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px;
+    }
+    .close {
+      position: absolute; top: 20px; right: 25px; color: #fff;
+      font-size: 28px; cursor: pointer; font-weight: bold;
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 100px 8% 80px;
+      max-width: 800px;
+      margin: auto;
+    }
+    .hero h1 {
+      font-size: 2.8rem;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .hero p {
+      color: var(--text);
+      font-size: 1.1rem;
+      margin-bottom: 28px;
+      opacity: 0.9;
+    }
+    .hero .hero-btn {
+      background: var(--accent);
+      color: #fff;
+      padding: 12px 22px;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .hero .hero-btn:hover {
+      background: var(--accent-dark);
+      transform: translateY(-2px);
+    }
+
+    /* Features */
+    .features {
+      padding: 80px 8%;
+      background: var(--muted);
+    }
+    .features h2 {
+      text-align: center;
+      color: var(--accent);
+      font-size: 2rem;
+      margin-bottom: 50px;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 28px;
+      max-width: 1000px;
+      margin: auto;
+    }
+    .feature {
+      background: var(--card);
+      padding: 24px;
+      border-radius: 14px;
+      box-shadow: 0 4px 12px rgba(255,77,109,0.12);
+      transition: transform 0.2s ease;
+    }
+    .feature:hover { transform: translateY(-6px); }
+    .feature h3 {
+      color: var(--accent);
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+    }
+    .feature p { color: var(--text); font-size: 0.95rem; opacity: 0.9; }
+
+    /* Journey Section */
+    .journey {
+      padding: 80px 8%;
+      background: var(--bg);
+      text-align: center;
+    }
+    .journey h2 {
+      color: var(--accent);
+      font-size: 2rem;
+      margin-bottom: 40px;
+    }
+    .journey-timeline {
+      max-width: 900px;
+      margin: auto;
+      display: grid;
+      gap: 40px;
+    }
+    .journey-step {
+      background: var(--muted);
+      border-left: 6px solid var(--accent);
+      padding: 24px;
+      border-radius: 12px;
+      text-align: left;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+    }
+    .journey-step h3 {
+      color: var(--accent);
+      margin-bottom: 10px;
+      font-size: 1.3rem;
+    }
+    .journey-step p {
+      color: var(--text);
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--accent);
+      color: #fff;
+      text-align: center;
+      padding: 40px 10%;
+      margin-top: 80px;
+    }
+    footer h3 {
+      font-weight: 600;
+      margin-bottom: 12px;
+      font-size: 1.2rem;
+    }
+    footer p {
+      font-size: 0.95rem;
+      opacity: 0.9;
+    }
+    footer small {
+      display: block;
+      margin-top: 18px;
+      opacity: 0.8;
+    }
+    .dob-label {
+  display: block;
+  text-align:left;
+  margin-top: 10px;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+    #dob {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2.2rem; }
+      header { flex-direction: row; gap: 10px; }
+      .journey-step { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">💞 HeartNote AI</div>
+    <button class="cta-btn" id="openSignup">Sign Up</button>
+  </header>
+  
+  <section class="hero" id="home">
+    <h1>HeartNote AI — Creative Writer</h1>
+    <p>HeartNote helps you express your real-life emotions and thoughts — from personal writings to social stories and lifestyle reflections.</p>
+    <a href="{% url 'aiwrite' %}" class="hero-btn">Try Free 💗</a>
+  </section>
+
+  <section class="features" id="features">
+    <h2>Why Writers Love HeartNote</h2>
+    <div class="features-grid">
+      <div class="feature">
+        <h3>❤️ Emotion Slider</h3>
+        <p>Adjust your tone from soft to deep and make your writing sound real, personal, and human.</p>
+      </div>
+      <div class="feature">
+        <h3>🪶 Natural Writing Flow</h3>
+        <p>HeartNote writes with human-like rhythm — smooth, calm, and expressive for every mood.</p>
+      </div>
+      <div class="feature">
+        <h3>🌸 Private Creations</h3>
+        <p>Your words belong only to you — stored locally, not shared or uploaded anywhere.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="journey" id="journey">
+    <h2>The HeartNote Journey 💫</h2>
+    <div class="journey-timeline">
+      <div class="journey-step">
+        <h3>✨ H1 — Personal Writing</h3>
+        <p>HeartNote begins with personal writing — helping users express emotions, memories, and thoughts in a heartfelt, handwritten tone.</p>
+      </div>
+      <div class="journey-step">
+        <h3>🌷 H2 — Daily Life & Social Posts</h3>
+        <p>HeartNote evolves to help users share their daily lives — writing posts, captions, and reflections that connect emotionally on social platforms.</p>
+      </div>
+      <div class="journey-step">
+        <h3>💎 H3 — Lifestyle & Wellbeing</h3>
+        <p>HeartNote expands into lifestyle and wellness — blending emotional writing with self-expression and positivity for everyday life.</p>
+      </div>
+<div class="journey-step">
+  <h3>🎨 H4 — Art & Visual Expression</h3>
+  <p>HeartNote unlocks creative visuals — turning feelings into AI-generated art & aesthetic mood backgrounds to enhance emotional storytelling.</p>
+</div>
+<div class="journey-step">
+  <h3>🧠 H5 — Emotional Insights & Healing</h3>
+  <p>HeartNote evolves into a personal emotional companion — offering mood insights, reflection analytics, and gentle guidance for mental wellbeing.</p>
+</div>
+    </div>
+  </section>
+
+  <footer>
+    <h3>HeartNote AI</h3>
+    <p>The creative writer that listens to your heart.</p>
+    <small>© 2025 HeartNote AI. All rights reserved.</small>
+  </footer>
+
+  <!-- Signup Modal -->
+<!-- Signup Modal -->
+<div id="signupModal" class="modal">
+  {%csrf_token%}
+  <div class="modal-content">
+    <span class="close" id="closeModal">&times;</span>
+    <h2>Create Account</h2>
+    <label for="dob" class="dob-label">Username</label>
+    <input type="text" id="username" placeholder="Username" required>
+    <label for="dob" class="dob-label">Email</label>
+    <input type="email" id="email" placeholder="Email" required>
+     <label for="dob" class="dob-label">Password</label>
+    <input type="password" id="password" placeholder="Password" required>
+
+    <!-- New Date of Birth Field -->
+    <label for="dob" class="dob-label">Date of Birth</label>
+    <input type="date" id="dob" required>
+
+    <button id="submitSignup">Sign Up</button>
+  </div>
+</div>
+
+
+  <script>
+const modal = document.getElementById('signupModal');
+const openBtn = document.getElementById('openSignup');
+const closeBtn = document.getElementById('closeModal');
+const submitBtn = document.getElementById('submitSignup');
+
+// Open modal
+openBtn.onclick = () => modal.style.display = 'flex';
+
+// Close modal
+closeBtn.onclick = () => modal.style.display = 'none';
+
+// Close when clicking outside
+window.onclick = (e) => {
+  if (e.target === modal) modal.style.display = 'none';
+};
+
+// -----------------------------
+// SIGNUP PROCESS
+// -----------------------------
+submitBtn.onclick = async () => {
+  const username = document.getElementById("username").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const dob = document.getElementById("dob").value;
+
+  if (!username || !email || !password || !dob) {
+    alert("Please fill all fields before continuing.");
+    return;
+  }
+
+  // -----------------------------
+  // LOCAL STORAGE PART (CLIENT ONLY)
+  // -----------------------------
+  localStorage.setItem("heartnote_username", username);
+  localStorage.setItem("email", email);
+  localStorage.setItem("dob", dob);
+
+  // Calculate age
+  const birth = new Date(dob);
+  const today = new Date();
+  let age = today.getFullYear() - birth.getFullYear();
+  const m = today.getMonth() - birth.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+    age--;
+  }
+
+  localStorage.setItem("age", age);
+  localStorage.setItem("mode", age < 18 ? "under18" : "adult");
+
+  // -----------------------------
+  // SEND ONLY SERVER DATA
+  // -----------------------------
+  const form = new FormData();
+  form.append("username", username);
+  form.append("email", email);
+  form.append("password", password);
+
+  const res = await fetch("/api/signup/", {
+    method: "POST",
+    body: form
+  });
+
+  const data = await res.json();
+
+  if (data.error) {
+    alert(data.error);
+    return;
+  }
+
+  // SUCCESS → Redirect
+  window.location.href = "/dashboard/";
+};
+</script>
+</body>
+</html>

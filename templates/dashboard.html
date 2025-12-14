@@ -1,0 +1,1932 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <title>HeartNote AI — Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Caveat:wght@400;600&family=Shadows+Into+Light&family=Dancing+Script:wght@400;600&display=swap"
+        rel="stylesheet">
+
+    <style>
+        body[data-theme="light"] {
+            --accent: #ff4d6d;
+            --accent-dark: #e63950;
+            --bg: #ffffff;
+            --text: #222222;
+            --card: #fff;
+            --muted: #f9f9f9;
+        }
+
+        body[data-theme="dark"] {
+            --bg: #0d0d0d;
+            --text: #f5f5f5;
+            --card: #1a1a1a;
+            --muted: #141414;
+            --accent: #ff668a;
+            --accent-dark: #ff4d6d;
+        }
+
+        body[data-theme="blossom"] {
+            --bg: #fff4f8;
+            /* soft blossom pink */
+            --text: #d0306a;
+            /* rose text */
+            --card: #ffe8f0;
+            /* light pink card */
+            --muted: #ffddea;
+            /* pale muted pink */
+            --accent: #ff4d80;
+            /* blossom accent */
+            --accent-dark: #e6396c;
+        }
+
+        :root[data-font="small"] {
+            font-size: 0.9rem;
+        }
+
+        :root[data-font="medium"] {
+            font-size: 1rem;
+        }
+
+        :root[data-font="large"] {
+            font-size: 1.1rem;
+        }
+
+
+
+
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            transition: background .3s, color .3s;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 230px;
+            background: var(--card);
+            border-right: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: var(--accent);
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .beta-tag {
+
+            font-size: 0.3rem;
+
+            font-weight: 600;
+
+            padding: 2px 6px;
+
+            border-radius: 6px;
+
+            background: #ff6b9f20;
+            /* soft pink background */
+
+            color: #ff3e7f;
+            /* strong pink text */
+
+            border: 1px solid #ff3e7f40;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.5px;
+
+        }
+
+
+        .menu a {
+            display: block;
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text);
+            text-decoration: none;
+            margin-bottom: 6px;
+            font-weight: 500;
+            opacity: 0.85;
+            transition: all .2s;
+        }
+
+        .menu a:hover,
+        .menu a.active {
+            background: var(--accent);
+            color: #fff;
+            opacity: 1;
+        }
+
+        .menu-group {
+            margin-bottom: 0.8rem;
+        }
+
+        .dropdown-btn {
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-size: 1rem;
+            cursor: pointer;
+            text-align: left;
+            width: 100%;
+            padding: 0.6rem 0.3rem;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+
+        .dropdown-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .dropdown-content {
+            display: none;
+            flex-direction: column;
+            margin-left: 10px;
+        }
+
+        .dropdown-content a {
+            display: block;
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text);
+            text-decoration: none;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            opacity: 0.85;
+            transition: all .2s;
+        }
+
+        .dropdown-content a:hover {
+            background: var(--accent);
+        }
+
+        .upgrade-btn {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background .2s;
+        }
+
+        .upgrade-btn:hover {
+            background: var(--accent-dark);
+        }
+
+        /* Main area */
+        .main {
+            margin-left: 230px;
+            flex: 1;
+            padding: 40px 60px;
+            background: var(--muted);
+            min-height: 100vh;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .topbar h1 {
+            color: var(--accent);
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+
+        .avatar-container {
+            position: relative;
+        }
+
+        .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid #ddd;
+        }
+
+
+        .hidden {
+            display: none;
+        }
+
+        /* --------------------------- */
+        /*   GLOBAL PAGE VIEW STYLES   */
+        /* --------------------------- */
+
+        .pageView {
+            margin: 30px auto;
+            width: 90%;
+            max-width: 650px;
+        }
+
+        .pageView.hidden {
+            display: none;
+        }
+
+        .pageView h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text);
+            text-align: center;
+        }
+
+
+        /* Main Account Page */
+        #accountView {
+            padding: 10px;
+            Width: 100%;
+            margin: 0 auto;
+
+        }
+
+        #accountView h2 {
+            font-size: 26px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        /* Section Boxes */
+        .section-box {
+            background: var(--card);
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+            transition: 0.2s ease;
+        }
+
+        .section-box label {
+            color: var(--text);
+        }
+
+        .section-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Row Layout */
+        .toggle-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            font-size: 1rem;
+            color: var(--text);
+        }
+
+        /* Switch Style */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        /* Slider Background */
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            border-radius: 24px;
+            transition: 0.3s;
+        }
+
+        /* Slider Circle */
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        /* ON State */
+        .switch input:checked+.slider {
+            background-color: #ff4f7b;
+        }
+
+        .switch input:checked+.slider:before {
+            transform: translateX(24px);
+        }
+
+
+        .section-box h3 {
+            margin-bottom: 12px;
+            font-weight: 600;
+            font-size: 1.25rem;
+            color: var(--text);
+        }
+
+        .section-box p {
+            color: var(--text);
+        }
+
+        /* Avatar */
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 10px 0;
+            display: block;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 12px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+        }
+
+        .info-row strong {
+            color: var(--text);
+        }
+
+        #editProfileBtn {
+            margin-top: 14px;
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        #editProfileBtn:hover {
+            opacity: 0.85;
+        }
+
+        /* Inputs */
+        #accountView input,
+        #accountView textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            font-size: 1rem;
+            transition: 0.2s ease;
+        }
+
+        #accountView input:focus,
+        #accountView textarea:focus {
+            border-color: var(--muted);
+            box-shadow: 0 0 6px rgba(255, 79, 123, 0.3);
+        }
+
+        /* Save and Logout Buttons */
+        #accountView button {
+            padding: 12px 16px;
+            background: #ff4f7b;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+            transition: 0.2s ease;
+        }
+
+        #accountView button:hover {
+            background: #ff355f;
+        }
+
+        /* Small About Text */
+        .about-small {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Back Button */
+        .back {
+            background: transparent;
+            border: none;
+            font-size: 16px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            color: var(--accent);
+        }
+
+        .tool-list {
+            display: none;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+            background: var(--muted);
+            border-radius: 12px;
+            padding: 14px;
+        }
+
+        .tool-item {
+            background: var(--card);
+            padding: 10px 12px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            cursor: pointer;
+            transition: transform 0.2s, background 0.3s;
+        }
+
+        .tool-item:hover {
+            transform: translateY(-2px);
+            background: var(--accent);
+            color: #fff;
+        }
+
+        /* Cards */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--card);
+            padding: 22px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            cursor: pointer;
+            transition: transform .2s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+        }
+
+        .card-icon {
+            font-size: 28px;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .card h3 {
+            font-size: 1.1rem;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .card p {
+            font-size: .9rem;
+            opacity: .85;
+        }
+
+        /* Workspace */
+        .workspace {
+            display: none;
+        }
+
+
+
+
+        .workspace.active {
+            display: block;
+        }
+
+
+
+        .form-container {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .form-section,
+        .playground-section {
+            background: var(--card);
+            padding: 24px;
+            border-radius: 14px;
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .form-section input,
+        .form-section textarea,
+        .form-section select {
+            width: 100%;
+            margin-bottom: 14px;
+            resize: none;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: var(--muted);
+            color: var(--text);
+        }
+
+        .form-section label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .copy-btn {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: var(--accent-dark);
+        }
+
+        .generate {
+            background: var(--accent);
+            color: #fff;
+            padding: 12px 18px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .generate:hover {
+            background: var(--accent-dark);
+        }
+
+        .playground-section h3 {
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .output {
+            font-family: 'Caveat', cursive;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            letter-spacing: 0.3px;
+            white-space: pre-wrap;
+            color: var(--text);
+            padding: 10px;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-decoration: none;
+            cursor: pointer;
+            margin-bottom: 10px;
+            /* Smooth animation */
+            transition: color 0.25s ease, transform 0.25s ease, opacity 0.25s ease;
+        }
+
+        .back-btn:hover {
+            color: var(--accent);
+            /* optional */
+            /* soft slide left */
+            opacity: 0.9;
+        }
+
+        .back-btn:active {
+            opacity: 0.7;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            font-size: .9rem;
+            opacity: .7;
+        }
+
+        .playground-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            /* allows wrapping on small screens */
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .input-group {
+            position: relative;
+            width: 100%;
+        }
+
+        .suggest-topic {
+            position: absolute;
+            right: 5px;
+            top: 10px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 1.2rem;
+            opacity: 0.7;
+            transition: 0.2s ease;
+        }
+
+        .suggest-felling {
+            position: absolute;
+            right: 5px;
+            top: 70px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 1.2rem;
+            opacity: 0.7;
+            transition: 0.2s ease;
+        }
+
+        .suggest-topic {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        .suggest-felling {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+
+
+        .input-group input,
+        .input-group textarea {
+            flex: 1;
+        }
+
+
+        .copy-btn {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: var(--accent-dark);
+        }
+
+        .recent-section {
+            margin-top: 30px;
+            padding: 15px;
+            background: var(--muted);
+            border-radius: 15px;
+        }
+
+        .recent-section h3 {
+            color: var(--text);
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .recent-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .recent-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card);
+            padding: 10px 12px;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+
+        .recent-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .recent-card:hover {
+            background: var(--card);
+        }
+
+        .recent-icon {
+            font-size: 1.3em;
+        }
+
+        .recent-text p {
+            margin: 0;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .recent-text small {
+            color: var(--text);
+            font-size: 0.8em;
+        }
+
+        h4 .delete-btn {
+            background: transparent;
+            border: none;
+            color: var(--bg);
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .delete-btn:hover {
+            color: var(--muted);
+        }
+
+        .maincardname {
+            margin: 10px;
+        }
+
+        /* Emotion Suggestions Box (Initially Hidden) */
+        .emotion-suggest {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            transition: opacity .3s ease;
+        }
+
+        .emotion-suggest.hidden {
+            display: none;
+        }
+
+        .emotion-suggest button {
+            padding: 6px 10px;
+            font-size: 13px;
+            border-radius: 12px;
+            border: none;
+            background: var(--bg);
+            color: var(--text);
+            cursor: pointer;
+        }
+
+        .emotion-suggest button:hover {
+            background: var(--muted);
+        }
+
+
+        /* Beta Mode UI Style */
+        .beta-ui {
+            letter-spacing: .5px;
+            filter: saturate(1.15);
+            transition: .3s ease;
+        }
+
+        .font-cute {
+            font-family: 'Patrick Hand', cursive;
+        }
+
+        .font-romantic {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        .font-deep {
+            font-family: 'Caveat', cursive;
+        }
+
+        .font-journal {
+            font-family: 'Shadows Into Light', cursive;
+        }
+
+        .handwrite-fade {
+            animation: fadeWrite 0.6s ease forwards;
+        }
+
+        .draw-effect {
+            animation: drawText 1s ease;
+        }
+
+        @keyframes fadeWrite {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes drawText {
+            0% {
+                opacity: 0;
+                filter: blur(2px);
+            }
+
+            100% {
+                opacity: 1;
+                filter: blur(0);
+            }
+        }
+
+        .select-style {
+            padding: 5px;
+            border-radius: 20px;
+        }
+
+
+
+
+
+        @media(max-width:768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                margin: 0;
+                padding: 30px;
+            }
+
+            .form-container {
+                flex-direction: column;
+            }
+
+            .playground-header {
+                justify-content: flex-start;
+            }
+
+            .copy-btn {
+                font-size: 0.85rem;
+                padding: 6px 12px;
+            }
+
+            #accountView {
+                width: 100%;
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div>
+            <div class="logo">
+                💞 HeartNote AI
+            </div>
+            <nav class="menu">
+
+                <!-- 🌞 Group 1: Day-to-Day Life -->
+                <div class="menu-group">
+                    <button class="dropdown-btn">🌿 Day-to-Day Life ▾</button>
+                    <div class="dropdown-content">
+                        <a href="#" onclick="openTool('Dashboard')">🏠 Dashboard</a>
+                        <a href="#" onclick="openTool('Reflection')">🌿 Reflection</a>
+                        <a href="#" onclick="openTool('Journal')">📖 Journal</a>
+                        <a href="#" onclick="openTool('Affirmation')">🌈 Affirmation</a>
+                        <a href="#" onclick="openTool('Notes')">📝 Notes</a>
+                    </div>
+                </div>
+
+                <!-- 💞 Group 2: Couples / Emotional Writing -->
+                <div class="menu-group">
+                    <button class="dropdown-btn">💞 Heart & Emotion ▾</button>
+                    <div class="dropdown-content">
+                        <a href="#" onclick="openTool('Letters')">💌 Letters</a>
+                        <a href="#" onclick="openTool('Poems')">🪶 Poems</a>
+                        <a href="#" onclick="openTool('Story')">✨ Story</a>
+                        <a href="#" onclick="openTool('Quotes')">💭 Quotes</a>
+                    </div>
+                </div>
+            </nav>
+
+        </div>
+        <button class="upgrade-btn" onclick="proAlert()">Upgrade to Pro 💗</button>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+        <!-- Topbar with avatar + dropdown -->
+        <div class="topbar">
+            <h1 id="welcomeText">Welcome!</h1>
+
+            <div class="avatar-container">
+                <img class="avatar" onclick="openTool('Accounts')" src="data:image/svg+xml;utf8,
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'>
+  <circle cx='32' cy='32' r='30' fill='%23ffe4e6'/>
+  <path d='M32 22c3-6 12-6 15 0 3 6-1 14-15 22-14-8-18-16-15-22 3-6 12-6 15 0z'
+        fill='%23e11d48'/>
+</svg>" />
+            </div>
+        </div>
+
+        <!-- Account View -->
+        <div id="accountView" class="hidden pageView">
+            <button class="back" onclick="goDashboard()">← Back</button>
+
+            <h2>👤 Account</h2>
+
+            <!-- PROFILE SECTION -->
+            <div class="section-box">
+                <h3>Profile</h3>
+                <center>
+                    <img class="profile-avatar" id="profileAvatar" src="data:image/svg+xml;utf8,
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'>
+  <circle cx='32' cy='32' r='30' fill='%23ffe4e6'/>
+  <path d='M32 22c3-6 12-6 15 0 3 6-1 14-15 22-14-8-18-16-15-22 3-6 12-6 15 0z'
+        fill='%23e11d48'/>
+</svg>">
+                </center>
+
+                <div class="info-row">
+                    <strong>Name</strong>
+                    <span id="displayUsername"></span>
+                </div>
+
+                <div class="info-row">
+                    <strong>Email</strong>
+                    <span id="displayEmail"></span>
+                </div>
+
+                <div class="info-row">
+                    <strong>DOB</strong>
+                    <span id="displayDOB"></span>
+                </div>
+
+                <div class="info-row">
+                    <strong>Age</strong>
+                    <span id="displayAge"></span>
+                </div>
+
+                <div class="info-row">
+                    <strong>Mode Access</strong>
+                    <span id="displayMode"></span>
+                </div>
+            </div>
+
+            <div class="section-box" id="settingsPanel">
+                <h3>Settings</h3>
+                <label class="toggle-row">
+                    <span>Theme</span>
+                    <select id="themeMode" class="select-style">
+                        <option value="light">Light</option>
+                        <option value="dark">Dark</option>
+                        <option value="blossom">Blossom 🌸</option>
+                    </select>
+                </label>
+                <label class="toggle-row">
+                    <span>Emotion Suggestions</span>
+                    <label class="switch">
+                        <input type="checkbox" id="emotionHintsToggle">
+                        <span class="slider"></span>
+                    </label>
+                </label>
+                <label class="toggle-row">
+                    <span>Focus Mode</span>
+                    <label class="switch">
+                        <input type="checkbox" id="focusModeToggle">
+                        <span class="slider"></span>
+                    </label>
+                </label>
+                <label class="toggle-row">
+                    <span>Handwriting Style</span>
+                    <select id="handwritingStyle" class="select-style">
+                        <option value="default" selected>Default</option>
+                        <option value="cute">Cute Notebook ✨</option>
+                        <option value="romantic">Romantic Script 💌</option>
+                        <option value="deep">Deep Poetry 🖋️</option>
+                        <option value="journal">Bold Journal 🌙</option>
+                    </select>
+                </label>
+                <label class="toggle-row">
+                    <span>Font Size</span>
+                    <select id="fontSize" class="select-style">
+                        <option value="small">Small</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="large">Large</option>
+                    </select>
+                </label>
+                <label class="toggle-row">
+                    <span>Auto Save</span>
+                    <label class="switch">
+                        <input type="checkbox" id="autoSaveToggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                </label>
+                <label class="toggle-row">
+                    <span>Language</span>
+                    <select id="uiLanguage" class="select-style">
+                        <option value="en">English</option>
+                    </select>
+                </label>
+
+                <button class="feedback-btn" onclick="openFeedbackForm()">
+                    Send Feedback
+                </button>
+
+
+                <button class="logout-btn" onclick="logoutUser()">Logout</button>
+            </div>
+
+            <!-- ABOUT SECTION -->
+            <div class="section-box">
+                <h3>About HeartNote AI</h3>
+
+                <p>HeartNote AI helps you express emotions with clarity and warmth.</p>
+                <p class="about-small">Version: 1.0<br>Created by Solulure Labs</p>
+            </div>
+        </div>
+
+
+        <!-- Dashboard Cards -->
+        <div id="libraryView">
+            <h3 class="maincardname">✨ Dashboard Tools</h3>
+            <div class="cards">
+                <div class="card" onclick="openTool('Letters')">
+                    <div class="card-icon">💌</div>
+                    <h3>Love Letter Maker</h3>
+                    <p>Express heartfelt feelings through poetic letters.</p>
+                </div>
+                <div class="card" onclick="openTool('Affirmation')">
+                    <div class="card-icon">🌈</div>
+                    <h3>Affirmation Creator</h3>
+                    <p>Create uplifting affirmations to brighten your day.</p>
+                </div>
+                <div class="card" onclick="openTool('Journal')">
+                    <div class="card-icon">📔</div>
+                    <h3>Mood Journal</h3>
+                    <p>Reflect and write about your emotions daily.</p>
+                </div>
+            </div>
+            <div id="recentSection" class="recent-section">
+                <h3>🕒 Your Recent Activity</h3>
+                <div id="recentCards" class="recent-cards"></div>
+            </div>
+        </div>
+
+        <!-- Tool Workspace -->
+        <!-- Tool Workspace -->
+        <div id="workspaceView" class="workspace">
+            <button class="back-btn" onclick="goBack()">← Back to Tools</button>
+            <div class="form-container">
+                <div class="form-section">
+                    <h3 id="toolTitle">Reflection</h3>
+
+                    <label for="nameInput">💗 Recipient or Topic</label>
+                    <div class="input-group">
+                        <input type="text" id="nameInput" placeholder="Enter recipient or topic..." required>
+                        <button class="suggest-topic" onclick="suggestName()" title="Suggest topic">💡</button>
+                    </div>
+                    <label for="descInput">📝 What do you feel?</label>
+                    <div class="input-group">
+                        <textarea id="descInput" rows="4" placeholder="Write your thoughts..." required></textarea>
+                        <button class="suggest-felling" onclick="suggestFeeling()" title="Suggest feeling">💡</button>
+                    </div>
+                    <div id="emotionSuggestBar" class="emotion-suggest hidden">
+                        <button onclick="selectEmotion('Happy 😊')">😊 Happy</button>
+                        <button onclick="selectEmotion('Sad 😢')">😢 Sad</button>
+                        <button onclick="selectEmotion('Angry 😡')">😡 Angry</button>
+                        <button onclick="selectEmotion('Stressed 😰')">😰 Stressed</button>
+                        <button onclick="selectEmotion('Confused 😶‍🌫️')">😶‍🌫️ Confused</button>
+                    </div>
+
+                    <label for="depthInput">🌊 Depth of Emotion</label>
+                    <select id="depthInput">
+                        <option value="light">Light</option>
+                        <option value="medium">Medium</option>
+                        <option value="deep">Deep</option>
+                    </select>
+
+                    <button class="generate" onclick="generateContent()">Generate Content</button>
+                </div>
+
+                <div class="playground-section">
+                    <div class="playground-header">
+                        <h3>🖋️ Playground</h3>
+                        <button class="copy-btn" onclick="copyText()">📋 Copy</button>
+                    </div>
+                    <div id="output" class="output">Your writing will appear here...</div>
+                </div>
+            </div>
+        </div>
+        <div id="state" data-blocked="false" data-viewing="false"></div>
+
+
+
+        <footer>© 2025 HeartNote AI — Designed with 💗 by Solulure Labs</footer>
+    </main>
+
+    <script>
+        const username = localStorage.getItem('heartnote_username');
+        if (username) {
+            document.getElementById('welcomeText').innerText = `Welcome, ${username} 💞`;
+        }
+
+
+        function openTool(name) {
+            // Hide everything first
+            document.getElementById("libraryView").style.display = "none";
+            document.getElementById("workspaceView").classList.remove("active");
+            document.getElementById("accountView").classList.add("hidden");
+
+
+            // --- 1️⃣ Dashboard ---
+            if (name === "Dashboard") {
+                document.getElementById("libraryView").style.display = "block";
+                showRecents();
+                return;
+            }
+
+            if (name === "Accounts") {
+                document.getElementById("accountView").classList.remove("hidden");
+                return;
+            }
+
+            // --- 5️⃣ Writing Tools (Letters, Poems, Notes...) ---
+            document.getElementById('workspaceView').classList.add('active');
+            document.getElementById('toolTitle').innerText = name;
+
+            const recents = JSON.parse(localStorage.getItem("recents")) || [];
+            const found = recents.find(r => r.name === name && r.output);
+
+            if (found && event.target.closest('.recent-card')) {
+                document.getElementById("nameInput").value = found.nameInput || "";
+                document.getElementById("descInput").value = found.descInput || "";
+                document.getElementById("depthInput").value = found.depthInput || "light";
+                document.getElementById("output").innerText = found.output || "Your writing will appear here...";
+            } else {
+                document.getElementById("nameInput").value = "";
+                document.getElementById("descInput").value = "";
+                document.getElementById("depthInput").value = "light";
+                document.getElementById("output").innerText = "Your writing will appear here...";
+            }
+        }
+
+        let isViewingRecent = false; // ✅ Track if we're viewing an existing recent
+
+        // 🕒 Save to recents
+        function saveRecent(toolName) {
+            let recents = JSON.parse(localStorage.getItem("recents")) || [];
+
+            const data = {
+                id: Date.now(),
+                name: toolName,
+                icon: getToolIcon(toolName),
+                time: new Date().toLocaleString(),
+                nameInput: document.getElementById("nameInput").value,
+                descInput: document.getElementById("descInput").value,
+                depthInput: document.getElementById("depthInput").value,
+                output: document.getElementById("output").innerText
+            };
+
+            recents.unshift(data);
+            recents = recents.slice(0, 20);
+            localStorage.setItem("recents", JSON.stringify(recents));
+        }
+
+        function getToolIcon(name) {
+            const icons = {
+                "Letters": "💌",
+                "Poems": "🪶",
+                "Story": "✨",
+                "Quotes": "💭",
+                "Journal": "📔",
+                "Notes": "📝",
+                "Affirmation": "🌈",
+                "Reflection": "🌿"
+            };
+            return icons[name] || "🪶";
+        }
+
+        function showRecents() {
+            const recents = JSON.parse(localStorage.getItem("recents")) || [];
+            const container = document.getElementById("recentCards");
+            container.innerHTML = "";
+
+            if (recents.length === 0) {
+                container.innerHTML = `<p class="no-recents">No recent activity yet.</p>`;
+                return;
+            }
+
+            recents.forEach(r => {
+                container.innerHTML += `
+      <div class="recent-card">
+        <div class="recent-left" onclick="openRecent(${r.id})">
+          <span class="recent-icon">${r.icon}</span>
+          <div class="recent-text">
+            <p>${r.name}</p>
+            <small>${r.time}</small>
+          </div>
+        </div>
+        <button class="delete-btn" onclick="deleteRecent(${r.id})">❌</button>
+      </div>
+    `;
+            });
+        }
+
+        window.addEventListener("DOMContentLoaded", showRecents);
+
+        // 🧹 Delete one
+        function deleteRecent(id) {
+            let recents = JSON.parse(localStorage.getItem("recents")) || [];
+            recents = recents.filter(r => r.id !== id);
+            localStorage.setItem("recents", JSON.stringify(recents));
+            showRecents();
+        }
+
+        // 🧭 Open a specific saved recent
+        function openRecent(id) {
+            const state = document.getElementById("state");
+            state.dataset.viewing = "true";
+            const recents = JSON.parse(localStorage.getItem("recents")) || [];
+            const item = recents.find(r => r.id === id);
+            if (!item) return;
+
+            // 🧩 Mark as viewing an existing record
+            isViewingRecent = true;
+
+            document.getElementById("toolTitle").innerText = item.name;
+            document.getElementById("nameInput").value = item.nameInput || "";
+            document.getElementById("descInput").value = item.descInput || "";
+            document.getElementById("depthInput").value = item.depthInput || "";
+            document.getElementById("output").innerText = item.output || "";
+
+            document.getElementById("libraryView").style.display = "none";
+            document.getElementById("workspaceView").classList.add("active");
+        }
+
+        // 🔙 Go back and save current state (only if not viewing an old one)
+        function goBack() {
+            const state = document.getElementById("state");
+            const isBlocked = state.dataset.blocked === "true";
+            const isViewingRecent = state.dataset.viewing === "true";
+
+            const currentTool = document.getElementById("toolTitle").innerText.trim();
+            const nameInput = document.getElementById("nameInput").value.trim();
+            const descInput = document.getElementById("descInput").value.trim();
+            const output = document.getElementById("output").innerText.trim();
+
+            const hasGeneratedContent = output && output !== "Your writing will appear here...";
+
+            // 🚫 Do not save if blocked
+            if (isBlocked) {
+                state.dataset.blocked = "false";
+            }
+            else if (!isViewingRecent && hasGeneratedContent) {
+                // ✅ ONLY save when real content is generated
+                saveRecent(currentTool);
+            }
+
+            // reset viewing flag
+            state.dataset.viewing = "false";
+
+            const workspace = document.getElementById("workspaceView");
+            const library = document.getElementById("libraryView");
+
+            workspace.classList.remove("active");
+            library.style.display = "block";
+            showRecents();
+        }
+        function emotionalTypeWrite(text, elementId, depth = "medium") {
+            const el = document.getElementById(elementId);
+            el.innerHTML = "";
+            let i = 0;
+
+            el.classList.add("output");
+
+            // Speed settings based on emotional depth
+            let speed;
+            if (depth === "deep") speed = 70;
+            else if (depth === "light") speed = 35;
+            else speed = 50;
+
+            function type() {
+                if (i < text.length) {
+                    el.textContent += text.charAt(i);
+                    i++;
+
+                    // Natural smooth pen-writing pause
+                    let pause = (i % 5 === 0) ? speed * 1.4 : speed;
+                    setTimeout(type, pause);
+                }
+            }
+            type();
+        }
+
+        async function generateContent() {
+            const name = document.getElementById("nameInput").value.trim();
+            const desc = document.getElementById("descInput").value.trim();
+            const depth = document.getElementById("depthInput").value;
+            const mode = document.getElementById("toolTitle").textContent.toLowerCase();
+
+            const settings = JSON.parse(localStorage.getItem("heartnote_settings")) || {};
+            const language = settings.language || "en";
+
+            const outputBox = document.getElementById("output");
+            outputBox.innerHTML = "⏳ Generating...";
+
+            let tone = "soft";
+            if (depth === "medium") tone = "balanced";
+            if (depth === "deep") tone = "deep";
+
+            const url = `/api/dashboard/?mode=${encodeURIComponent(mode)}&name=${encodeURIComponent(name)}&desc=${encodeURIComponent(desc)}&tone=${tone}&language=${language}`;
+
+           try {
+    const res = await fetch(url);
+    const data = await res.json();
+
+    const state = document.getElementById("state");
+
+    if (data.blocked === true) {
+        state.dataset.blocked = "true";
+        emotionalTypeWrite(data.response, "output", depth);
+        return;
+    }
+
+    state.dataset.blocked = "false";
+    emotionalTypeWrite(data.response, "output", depth);
+
+} catch (err) {
+    outputBox.innerHTML = "⚠️ Error contacting backend.";
+}
+
+        }
+
+        function copyText() {
+            const tool = document.getElementById("toolTitle").innerText.toLowerCase();
+            const text = document.getElementById("output").innerText;
+
+            // All emotional tools (written safely)
+            const sensitiveTools = ["letters", "poems", "story", "quotes"];
+
+            if (sensitiveTools.includes(tool)) {
+                const confirmCopy = confirm(
+                    "⚠️ This is original emotional content.\n" +
+                    "Please use it responsibly and avoid hurting others.\n\n" +
+                    "Do you still want to copy it?"
+                );
+                if (!confirmCopy) return;
+            }
+
+            navigator.clipboard.writeText(text);
+            alert("Copied to clipboard 💗");
+        }
+        function suggestName() {
+            // Assuming currentMode() is defined and returns the mode string (e.g., 'reflection', 'letters')
+            const mode = currentMode();
+            let ideas = [];
+
+            // These ideas are designed to work well as the "who/what" the content is FOR (the nameInput).
+            switch (mode) {
+                case "reflection":
+                    ideas = ["My biggest lesson", "Who I'm becoming", "What I value", "Healing my heart", "Why today matters"];
+                    break;
+                case "journal":
+                    ideas = ["Today's highlight", "My mood right now", "Someone I talked to", "What surprised me", "My energy level"];
+                    break;
+                case "notes":
+                    ideas = ["A goal to remember", "A habit to fix", "A person to check in with", "A motivational line", "My best idea today"];
+                    break;
+                case "affirmation":
+                    ideas = ["I am enough", "My courage", "Confidence today", "My unique strengths", "I deserve happiness"];
+                    break;
+                case "letters":
+                    ideas = ["Someone I miss", "Future me", "Someone who hurt me", "A thank you note", "My inner child"];
+                    break;
+                case "poems":
+                    ideas = ["A quiet night", "Soft feelings", "Hope rising", "A new chapter", "A secret wish"];
+                    break;
+                case "story":
+                    ideas = ["A fresh start", "A hero within", "Lost & found", "The brave one", "A dreamer"];
+                    break;
+                case "quotes":
+                    ideas = ["Courage", "Self-love", "Letting go", "Patience", "Growth takes time"];
+                    break;
+                default:
+                    ideas = ["Life today", "Growth", "Connection", "Peaceful moment", "A new step"];
+            }
+
+            document.getElementById("nameInput").value =
+                ideas[Math.floor(Math.random() * ideas.length)];
+        }
+
+        // Keep this function IF you have individual, smaller buttons for quick stacking
+        // APPEND MODE — emotional tags
+        function selectEmotion(text) {
+            const input = document.getElementById("descInput");
+            const current = input.value.trim();
+
+            input.value = current ? current + ", " + text : text;
+            input.focus();
+        }
+
+        // REPLACE MODE — suggestion feeling (always replace)
+        function suggestFeeling() {
+            const input = document.getElementById("descInput");
+            const newSuggestion = generateSuggestionContent();
+
+            // Always replace previous text
+            input.value = newSuggestion;
+
+            input.focus();
+        }
+
+
+
+        // 📌 Helper function to move suggestion logic out of suggestFeeling
+        function generateSuggestionContent() {
+            const mode = currentMode();
+            let emotions = [];
+
+            switch (mode) {
+                case "reflection":
+                    emotions = [
+                        "a sense of calm returning 🌿, learning slowly, accepting what I cannot change",
+                        "mistakes becoming lessons ✨, fear turning into clarity, breathing deeper again",
+                        "pausing to understand myself 🍃, letting thoughts settle, finding inner balance",
+                        "softly healing my past 🌙, learning patience, trusting the timing of life"
+                    ];
+                    break;
+
+                case "journal":
+                    emotions = [
+                        "proud of my small steps 🌱, hopeful for tomorrow, growing quietly within",
+                        "messy feelings today 🌧️, still choosing strength, still choosing me",
+                        "thoughts a little heavy ⚖️, heart still trying, hope still alive",
+                        "every setback teaches 📘, every moment shapes me, I'm becoming stronger"
+                    ];
+                    break;
+
+                case "notes":
+                    emotions = [
+                        "a gentle reminder to care for myself 💛, tiny hope still alive, breathing through the chaos",
+                        "confidence growing softly 🌼, progress even in silence, kindness to myself always",
+                        "pausing, resetting, restarting 🔄, I am allowed to rest, I am allowed to heal",
+                        "quiet courage inside me 🌟, choosing truth, choosing peace"
+                    ];
+                    break;
+
+                case "affirmation":
+                    emotions = [
+                        "I trust myself 💪, I honor my journey, I am becoming who I need",
+                        "I am enough 🌸, love surrounds me, peace is finding me today",
+                        "strength lives in me 🔥, healing flows through me, hope guides me",
+                        "I choose me ❤️, I deserve kindness, I am growing beautifully"
+                    ];
+                    break;
+
+                case "letters":
+                    emotions = [
+                        "grateful for what we had 💌, healing slowly, choosing peace from now on",
+                        "words I never said 💭, forgiveness I still hold, love growing softer",
+                        "missing what was 🌙, accepting what is, letting time heal the rest",
+                        "your memory still warm ✉️, truth still gentle, hearts still learning"
+                    ];
+                    break;
+
+                case "poems":
+                    emotions = [
+                        "a heart learning to feel again 💖, stars guiding lost souls, beauty in broken pieces",
+                        "tears like poetry 🌧️, love like gentle fire, hope like dawn",
+                        "silence speaking softly 🌑, dreams glowing quietly, tomorrow blooming again",
+                        "melodies of healing 🎵, light through cracks, courage in softness"
+                    ];
+                    break;
+
+                case "story":
+                    emotions = [
+                        "a hero finding courage 🛡️, destiny shifting forward, wounds becoming power",
+                        "a quiet turning point ✨, where pain teaches strength, and hearts keep beating",
+                        "adventure rising again 🌄, fear slowly fading, bravery learning its voice",
+                        "chapters of growth 📖, plots of healing, endings becoming beginnings"
+                    ];
+                    break;
+
+                case "quotes":
+                    emotions = [
+                        "healing isn’t loud 🌟, progress isn’t seen, love isn’t rushed",
+                        "let go of what hurts 🍂, hold on to what heals, trust the journey",
+                        "the strongest hearts are soft 💫, the bravest souls are gentle",
+                        "peace is a practice 🕊️, hope is a habit, love is a choice"
+                    ];
+                    break;
+
+                default:
+                    emotions = [
+                        "today I feel a soft hope 🌷, a gentle step, a quiet courage",
+                        "peace in small things 🌻, comfort in silence, love in healing",
+                        "slow progress is progress 🐢, calm is strength, softness is power",
+                        "breathing deeper again 💚, making space for good things, letting stress fade"
+                    ];
+            }
+
+            const randomIndex = Math.floor(Math.random() * emotions.length);
+            return emotions[randomIndex];
+        }
+        function currentMode() {
+            const tool = document.getElementById("toolTitle").innerText.toLowerCase();
+
+            switch (tool) {
+                case "reflection": return "reflection";
+                case "journal": return "journal";
+                case "notes": return "notes";
+                case "affirmation": return "affirmation";
+                case "letters": return "letters";
+                case "poems": return "poems";
+                case "story": return "story";
+                case "quotes": return "quotes";
+                default: return "default";
+            }
+        }
+
+        document.querySelectorAll('.dropdown-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const dropdown = button.nextElementSibling;
+                dropdown.style.display = dropdown.style.display === 'flex' ? 'none' : 'flex';
+            });
+        });
+        window.addEventListener("DOMContentLoaded", function () {
+            const mode = localStorage.getItem("mode");
+            const heartMenu = document.querySelectorAll(".menu-group")[1]; // second group (Heart & Emotion)
+
+            if (mode === "under18") {
+                // Hide romantic/emotional tools
+                heartMenu.style.display = "none";
+            } else if (mode === "adult") {
+                // Show all tools
+                heartMenu.style.display = "block";
+            }
+        });
+        window.addEventListener("DOMContentLoaded", function () {
+            const mode = localStorage.getItem("mode");
+            const cardsContainer = document.querySelector(".cards");
+            const isMobile = window.innerWidth <= 768; // detect small screen
+            cardsContainer.innerHTML = ""; // clear cards
+
+            // ✨ Recommendation system (for simple future use)
+            const recommend = (toolName, description) => {
+                console.log(`Recommended tool: ${toolName} → ${description}`);
+            };
+            if (mode === "under18") {
+                // 🧒 Under 18
+                const under18Cards = [
+                    { icon: "📔", title: "Mood Journal", desc: "Write your thoughts and daily reflections.", tool: "Journal" },
+                    { icon: "📝", title: "Notes", desc: "Keep small thoughts or study ideas safely.", tool: "Notes" },
+                    { icon: "🌈", title: "Affirmation Creator", desc: "Positive words to strengthen your day.", tool: "Affirmation" },
+                    { icon: "🌿", title: "Reflection", desc: "Think deeply about your goals and feelings.", tool: "Reflection" }
+                ];
+
+                under18Cards.forEach(card => {
+                    recommend(card.title, card.desc);
+                    cardsContainer.innerHTML += `
+        <div class="card" onclick="openTool('${card.tool}')">
+          <div class="card-icon">${card.icon}</div>
+          <h3>${card.title}</h3>
+          <p>${card.desc}</p>
+        </div>
+      `;
+                });
+            } else {
+                // 👩‍💼 Above 18
+                const fullCards = [
+                    { icon: "💌", title: "Letters", desc: "Express heartfelt emotions through writing.", tool: "Letters" },
+                    { icon: "🪶", title: "Poems", desc: "Write beautiful verses from your feelings.", tool: "Poems" },
+                    { icon: "✨", title: "Stories", desc: "Turn your thoughts into meaningful stories.", tool: "Story" },
+                    { icon: "💭", title: "Quotes", desc: "Create inspiring lines and sayings.", tool: "Quotes" },
+                    { icon: "📔", title: "Mood Journal", desc: "Reflect on your feelings every day.", tool: "Journal" },
+                    { icon: "📝", title: "Notes", desc: "Keep your quick thoughts safe.", tool: "Notes" },
+                    { icon: "🌈", title: "Affirmations", desc: "Positive messages for yourself or others.", tool: "Affirmation" },
+                    { icon: "🌿", title: "Reflection", desc: "Think and write about your journey.", tool: "Reflection" }
+                ];
+                // 📱 Mobile shows all, 💻 Desktop shows limited (e.g. top 4)
+                const visibleCards = isMobile ? fullCards : fullCards.slice(0, 4);
+                visibleCards.forEach(card => {
+                    recommend(card.title, card.desc);
+                    cardsContainer.innerHTML += `
+        <div class="card" onclick="openTool('${card.tool}')">
+          <div class="card-icon">${card.icon}</div>
+          <h3>${card.title}</h3>
+          <p>${card.desc}</p>
+        </div>
+      `;
+                });
+            }
+        });
+        document.addEventListener("DOMContentLoaded", () => {
+            const output = document.getElementById("output");
+
+            if (output) {
+                output.addEventListener("input", () => {
+                    const toolName = document.getElementById("toolTitle").innerText;
+                    const currentText = output.innerText;
+                    updateRecentContent(toolName, currentText);
+                });
+            }
+
+            showRecents();
+        });
+        function updateRecentContent(toolName, newContent) {
+            let recents = JSON.parse(localStorage.getItem("recents")) || [];
+            const index = recents.findIndex(r => r.name === toolName);
+            if (index !== -1) {
+                recents[index].content = newContent;
+                localStorage.setItem("recents", JSON.stringify(recents));
+            }
+        }
+        function hideAllPages() {
+            document.querySelectorAll(".pageView").forEach(p => p.classList.add("hidden"));
+            document.getElementById("libraryView").style.display = "none";
+        }
+        function goDashboard() {
+            hideAllPages();
+            document.getElementById("libraryView").style.display = "block";  // Show main screen
+        }
+        window.onload = () => {
+            loadProfile();
+        };
+        function calculateAge(dob) {
+            const birthDate = new Date(dob);
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const m = today.getMonth() - birthDate.getMonth();
+
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            return age;
+        }
+
+        function loadProfile() {
+            const username = localStorage.getItem("heartnote_username") || "Guest";
+            const email = localStorage.getItem("email") || "Not provided";
+            const dob = localStorage.getItem("dob") || "Not set";
+            const mode = localStorage.getItem("mode") || "unknown";
+
+            document.getElementById("displayUsername").textContent = username;
+            document.getElementById("displayEmail").textContent = email;
+            document.getElementById("displayDOB").textContent = dob;
+
+            if (dob !== "Not set") {
+                const age = calculateAge(dob);
+                document.getElementById("displayAge").textContent = age + " years";
+            } else {
+                document.getElementById("displayAge").textContent = "-";
+            }
+
+            document.getElementById("displayMode").textContent =
+                mode === "under18" ? "Safe Mode (Under 18)" : "Full Access";
+        }
+
+        document.addEventListener("DOMContentLoaded", loadProfile);
+
+
+        // === Focus Mode ===
+        function toggleFocusMode(isEnabled) {
+            const sidebar = document.getElementById("emotionSuggestBar");
+            const settings = document.getElementById("settingsPanel");
+
+            if (sidebar) sidebar.style.display = isEnabled ? "none" : "";
+            if (settings) settings.style.opacity = isEnabled ? "0.3" : "1";
+        }
+
+        document.getElementById("focusModeToggle").addEventListener("change", (e) => {
+            const enabled = e.target.checked;
+            localStorage.setItem("focusMode", enabled);
+            toggleFocusMode(enabled);
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const focusEnabled = JSON.parse(localStorage.getItem("focusMode")) ?? false;
+            document.getElementById("focusModeToggle").checked = focusEnabled;
+            toggleFocusMode(focusEnabled);
+        });
+        // === Emotion Suggestions Toggle ===
+        function updateEmotionHintsUI(enabled) {
+            const bar = document.getElementById("emotionSuggestBar");
+            if (!bar) return;
+            bar.classList.toggle("hidden", !enabled);
+        }
+
+        document.getElementById("emotionHintsToggle").addEventListener("change", (e) => {
+            const enabled = e.target.checked;
+            localStorage.setItem("emotionHints", JSON.stringify(enabled));
+            updateEmotionHintsUI(enabled);
+        });
+        // Load saved state on page load
+        document.addEventListener("DOMContentLoaded", () => {
+            const saved = JSON.parse(localStorage.getItem("emotionHints")) ?? true;
+            document.getElementById("emotionHintsToggle").checked = saved;
+            updateEmotionHintsUI(saved);
+        });
+
+
+        function loadTheme() {
+            const settings = JSON.parse(localStorage.getItem("heartnote_settings")) || {};
+            const theme = settings.theme || "light";
+
+            // apply to body
+            document.body.setAttribute("data-theme", theme);
+
+            // set dropdown if exists
+            const select = document.getElementById("themeMode");
+            if (select) select.value = theme;
+        }
+
+        function saveTheme(value) {
+            const settings = JSON.parse(localStorage.getItem("heartnote_settings")) || {};
+            settings.theme = value;
+            localStorage.setItem("heartnote_settings", JSON.stringify(settings));
+            document.body.setAttribute("data-theme", value);
+        }
+
+        // listen for dropdown change
+        document.addEventListener("change", (e) => {
+            if (e.target.id === "themeMode") {
+                saveTheme(e.target.value);
+            }
+        });
+
+        // apply theme on startup
+        loadTheme();
+        // === Logout ===
+        async function logoutUser() {
+
+            // MUST be POST, or Django rejects it
+            await fetch("/api/delete-account/", {
+                method: "POST",
+                headers: { "X-Requested-With": "XMLHttpRequest" }
+            });
+
+            localStorage.clear();
+
+            window.location.href = "/";
+        }
+        const styleSelect = document.getElementById("handwritingStyle");
+        const outputArea = document.getElementById("output");
+        const savedStyle = localStorage.getItem("handwritingStyle");
+        if (savedStyle) {
+            styleSelect.value = savedStyle;
+            applyHandwritingStyle(savedStyle);
+        }
+
+        styleSelect.addEventListener("change", (e) => {
+            const selected = e.target.value;
+            localStorage.setItem("handwritingStyle", selected);
+            applyHandwritingStyle(selected);
+        });
+        function applyHandwritingStyle(style) {
+            outputArea.classList.remove("font-cute", "font-romantic", "font-deep", "font-journal");
+
+            if (style === "cute") {
+                outputArea.classList.add("font-cute");
+            } else if (style === "romantic") {
+                outputArea.classList.add("font-romantic");
+            } else if (style === "deep") {
+                outputArea.classList.add("font-deep");
+            } else if (style === "journal") {
+                outputArea.classList.add("font-journal");
+            }
+        }
+        function applyHandwriting(fontName) {
+            const h1 = document.querySelector("p");
+            h1.style.fontFamily = fontName;
+
+            h1.classList.remove("handwriting-animate");
+            void h1.offsetWidth; // restart animation trick
+            h1.classList.add("handwriting-animate");
+
+            h1.classList.remove("draw-effect");
+            void h1.offsetWidth;
+            h1.classList.add("draw-effect");
+
+        }
+
+        function loadFontSize() {
+            const s = JSON.parse(localStorage.getItem("heartnote_settings")) || {};
+            const v = s.fontSize || "medium";
+
+            document.documentElement.setAttribute("data-font", v);
+
+            const el = document.getElementById("fontSize");
+            if (el) el.value = v;
+        }
+
+
+        function saveFontSize(value) {
+            const s = JSON.parse(localStorage.getItem("heartnote_settings")) || {};
+            s.fontSize = value;
+            localStorage.setItem("heartnote_settings", JSON.stringify(s));
+
+            document.documentElement.setAttribute("data-font", value);
+        }
+
+
+        function loadAutoSave() {
+            const s = JSON.parse(localStorage.getItem("heartnote_settings")) || {};
+            const v = s.autoSave ?? true;
+            const el = document.getElementById("autoSaveToggle");
+            if (el) el.checked = v;
+        }
+
+        function saveAutoSave(value) {
+            const s = JSON.parse(localStorage.getItem("heartnote_settings")) || {};
+            s.autoSave = value;
+            localStorage.setItem("heartnote_settings", JSON.stringify(s));
+        }
+
+        function loadLanguage() {
+            const s = JSON.parse(localStorage.getItem("heartnote_settings")) || {};
+            const v = s.language || "en";
+            const el = document.getElementById("uiLanguage");
+            if (el) el.value = v;
+        }
+
+        function saveLanguage(value) {
+            const s = JSON.parse(localStorage.getItem("heartnote_settings")) || {};
+            s.language = value;
+            localStorage.setItem("heartnote_settings", JSON.stringify(s));
+        }
+
+        document.addEventListener("change", (e) => {
+            if (e.target.id === "fontSize") {
+                saveFontSize(e.target.value);
+                applyFontSize();   // ← REQUIRED
+            }
+
+            if (e.target.id === "autoSaveToggle") {
+                saveAutoSave(e.target.checked);
+            }
+
+            if (e.target.id === "uiLanguage") {
+                saveLanguage(e.target.value);
+            }
+        });
+
+
+        function applyFontSize() {
+            const s = JSON.parse(localStorage.getItem("heartnote_settings")) || {};
+            const size = s.fontSize || "medium";
+            document.documentElement.setAttribute("data-font", size);
+        }
+
+
+
+        function openFeedbackForm() {
+            window.open("https://docs.google.com/forms/d/e/1FAIpQLSf4rrCaMcpGZMRzVB52OCqQGiMES2UrMnpc8Szd6D8oEEGjYw/viewform?usp=dialog", "_blank");
+        }
+
+        function proAlert() {
+            alert("HeartNote Pro is coming soon ✨");
+        }
+
+
+    </script>
+</body>
+
+</html>
