@@ -169,8 +169,7 @@ class Dashboard_LLM_Service:
                 "response": (
                     "AI writing is temporarily resting 🌱\n\n"
                     "HeartNote will be back with full depth very soon."
-                ),
-                "blocked": False
+                )
             }
 
         # 3️⃣ TEMPLATE SELECTION
