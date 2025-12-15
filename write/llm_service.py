@@ -1,3 +1,4 @@
+import os
 import requests
 from datetime import datetime
 
@@ -59,9 +60,8 @@ Date: {date}
 {content}
 """
 
-
 POEM_TEMPLATE = """
-📝 Poem
+Poem
 
 Write a short emotional poem based on: {content}
 
@@ -76,7 +76,7 @@ Respond ONLY with the poem.
 """
 
 QUOTE_TEMPLATE = """
-💬 Quote
+Quote
 
 Write a short emotional quote about: {content}
 
@@ -91,7 +91,7 @@ Respond ONLY with the quote.
 """
 
 AFFIRMATION_TEMPLATE = """
-🌼 Affirmation
+Affirmation
 
 Write a short emotional affirmation inspired by: {content}
 
@@ -106,7 +106,7 @@ Respond ONLY with the affirmation.
 """
 
 REFLECTION_TEMPLATE = """
-🌙 Reflection
+Reflection
 
 Write a short emotional reflection based on: {content}
 
@@ -120,7 +120,7 @@ Respond ONLY with the reflection.
 """
 
 STORY_TEMPLATE = """
-📘 Story
+Story
 
 Write a very short emotional story based on: {content}
 
@@ -134,7 +134,7 @@ Respond ONLY with the story.
 """
 
 NOTE_TEMPLATE = """
-🗒️ Note
+Note
 
 Write a short structured emotional note about: {content}
 
@@ -146,124 +146,118 @@ RULES:
 
 Format:
 • What you felt: {content}
-• Why it happened: (1 short line)
-• What to try: (1 short line)
+• Why it happened: one short neutral line
+• What to try: one gentle idea
 """
 
 
-
-
 # ------------------------------------------
-# LLM SERVICE (GEMINI ONLY)
+# LLM SERVICE (LOCAL OLLAMA + SAFE FALLBACK)
 # ------------------------------------------
 class LLM_Service:
 
     def __init__(self):
-        pass
+        self.ollama_url = "http://localhost:11434/api/generate"
+        self.model = "llama3.2:3b"
 
     # -------------------------
-    # Gemini API call
+    # Ollama call (LOCAL ONLY)
     # -------------------------
-    def call_ollama(self, prompt, model="llama3.2:3b"):
-        url = "http://localhost:11434/api/generate"
-        payload = {
-        "model": model,
-        "prompt": prompt,
-        "stream": False
-        }
+    def call_ollama(self, prompt):
         try:
-            response = requests.post(url, json=payload)
+            response = requests.post(
+                self.ollama_url,
+                json={
+                    "model": self.model,
+                    "prompt": prompt,
+                    "stream": False
+                },
+                timeout=60
+            )
             return response.json().get("response", "").strip()
-        except Exception as e:
-            return f"⚠️ Ollama error: {str(e)}"
-
+        except Exception:
+            return "⚠️ AI writing is temporarily resting. Please try again shortly."
 
     # -------------------------
-    # Router
+    # Main generator
     # -------------------------
     def generate(self, mode, text, tone="soft"):
-        tone_style = TONE_MAP.get(tone, TONE_MAP["soft"])
         mode = mode.lower().strip()
+        tone_style = TONE_MAP.get(tone, TONE_MAP["soft"])
 
-        # Select template
-        prompt = self.build_prompt(mode, text, tone_style)
-        safe, result = self.safety_filter(text)
+        # 🔒 Safety FIRST
+        safe, safe_response = self.safety_filter(text)
         if not safe:
-            return result
+            return safe_response
 
+        prompt = self.build_prompt(mode, text, tone_style)
+        if not prompt:
+            return "⚠️ Unknown writing mode."
 
-        if prompt is None:
-            return "⚠️ Unknown mode."
+        # 🚫 Render / Cloud fallback
+        if os.environ.get("RENDER"):
+            return "AI writing is temporarily resting. Please try again shortly."
 
-        return self.call_ollama(prompt, model="llama3.2:3b")
+        return self.call_ollama(prompt)
 
     # -------------------------
-    # Template selection
+    # Prompt builder
     # -------------------------
     def build_prompt(self, mode, text, tone):
         if mode == "letter":
             return LETTER_TEMPLATE.format(content=text, tone=tone)
 
-        elif mode == "journal":
+        if mode == "journal":
             date_str = datetime.now().strftime("%d/%m/%Y")
             return JOURNAL_TEMPLATE.format(date=date_str, content=text, tone=tone)
 
-        elif mode == "poem":
+        if mode == "poem":
             return POEM_TEMPLATE.format(content=text, tone=tone)
 
-        elif mode == "quote":
+        if mode == "quote":
             return QUOTE_TEMPLATE.format(content=text, tone=tone)
 
-        elif mode == "affirmation":
+        if mode == "affirmation":
             return AFFIRMATION_TEMPLATE.format(content=text, tone=tone)
 
-        elif mode == "reflection":
+        if mode == "reflection":
             return REFLECTION_TEMPLATE.format(content=text, tone=tone)
 
-        elif mode == "story":
+        if mode == "story":
             return STORY_TEMPLATE.format(content=text, tone=tone)
 
-        elif mode == "note":
-            return NOTE_TEMPLATE.format(content=text, tone=tone)
+        if mode == "note":
+            return NOTE_TEMPLATE.format(content=text)
 
         return None
-    
 
+    # -------------------------
+    # SAFETY FILTER
+    # -------------------------
     def safety_filter(self, text):
-        text_lower = text.lower().strip()
+        t = text.lower().strip()
 
-    # --------------------------------------
-    # BAD WORD BLOCK
-    # --------------------------------------
         bad_words = [
             "fuck", "bitch", "shit", "asshole",
             "bastard", "slut", "dick", "pussy",
-            "kill you", "hurt you"  # generic abuse
+            "kill you", "hurt you"
         ]
         for w in bad_words:
-            if w in text_lower:
-                return False, "⚠️ Your input contains unsafe or harmful language. Please rewrite it more respectfully."
+            if w in t:
+                return False, "⚠️ Please rewrite your text using respectful language."
 
         selfharm_patterns = [
-        "kill myself",
-        "kill me",
-        "i want to die",
-        "end my life",
-        "i want to disappear",
-        "i hurt myself",
-        "self harm",
-        "i can't live",
-        "no reason to live",
-    ]
-        for pattern in selfharm_patterns:
-            if pattern in text_lower:
+            "kill myself", "kill me", "i want to die",
+            "end my life", "i want to disappear",
+            "self harm", "i can't live", "no reason to live"
+        ]
+        for p in selfharm_patterns:
+            if p in t:
                 return False, (
-                "⚠️ HeartNote AI cannot continue this request.\n"
-                "You are feeling something heavy.\n"
-                "Here is a gentle, safe message instead:\n\n"
-                "• You deserve care.\n"
-                "• You are not alone.\n"
-                "• Your feelings matter.\n"
-            )
-            
+                    "⚠️ HeartNote AI cannot continue this request.\n\n"
+                    "• You deserve care.\n"
+                    "• You are not alone.\n"
+                    "• Your feelings matter.\n"
+                )
+
         return True, text
