@@ -194,7 +194,7 @@ class Dashboard_LLM_Service:
                 "Please try again shortly."
             )
 
-        return {"response": text, "blocked": False}
+        return {"response": text}
 
     # -------------------------------------------------
     # SAFETY FILTER
