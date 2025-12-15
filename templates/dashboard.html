@@ -1383,11 +1383,17 @@
 
     const state = document.getElementById("state");
 
-    if (data.blocked === true) {
-        state.dataset.blocked = "true";
-        emotionalTypeWrite(data.response, "output", depth);
-        return;
-    }
+   if (data.blocked === true) {
+    state.dataset.blocked = "true";
+
+    const text =
+        typeof data === "string"
+            ? data
+            : data.response || "";
+
+    emotionalTypeWrite(text, "output", depth);
+    return;
+}
 
     state.dataset.blocked = "false";
     emotionalTypeWrite(data.response, "output", depth);
