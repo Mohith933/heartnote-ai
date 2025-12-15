@@ -145,82 +145,93 @@ Format ONLY:
 class Dashboard_LLM_Service:
 
     def generate(self, mode, name, desc, depth, language):
-        depth = (depth or "light").lower().strip()
-        tone = DEPTH_TONE.get(depth, DEPTH_TONE["light"])
-        mode = (mode or "").lower().strip()
-        language = (language or "en").lower().strip()
+    depth = (depth or "light").lower().strip()
+    tone = DEPTH_TONE.get(depth, DEPTH_TONE["light"])
 
-        # 1️⃣ Safety filter
-        safe, message = self.safety_filter(desc)
-        if not safe:
-            return {"response": message}
+    mode = (mode or "").lower().strip()
+    language = (language or "en").lower().strip()
 
-        # 2️⃣ Template selection
-        templates = {
-            "reflection": DASHBOARD_REFLECTION,
-            "letters": DASHBOARD_LETTER,
-            "journal": DASHBOARD_JOURNAL,
-            "poems": DASHBOARD_POEM,
-            "story": DASHBOARD_STORY,
-            "quotes": DASHBOARD_QUOTE,
-            "affirmation": DASHBOARD_AFFIRMATION,
-            "notes": DASHBOARD_NOTE,
+    # 1️⃣ Safety filter
+    safe, message = self.safety_filter(desc)
+    if not safe:
+        return {
+            "response": message,
+            "blocked": True
         }
 
-        template = templates.get(mode)
-        if not template:
-            return {"response": "This writing mode is not available."}
+    # 2️⃣ Template selection
+    templates = {
+        "reflection": DASHBOARD_REFLECTION,
+        "letters": DASHBOARD_LETTER,
+        "journal": DASHBOARD_JOURNAL,
+        "poems": DASHBOARD_POEM,
+        "story": DASHBOARD_STORY,
+        "quotes": DASHBOARD_QUOTE,
+        "affirmation": DASHBOARD_AFFIRMATION,
+        "notes": DASHBOARD_NOTE,
+    }
 
-        # 3️⃣ Prompt build
-        date = datetime.now().strftime("%d/%m/%Y")
+    template = templates.get(mode)
+    if not template:
+        return {
+            "response": "This writing mode is not available.",
+            "blocked": False
+        }
 
-        prompt = template.format(
-            name=name,
-            desc=desc,
-            tone=tone,
-            date=date
+    # 3️⃣ Prompt build
+    date = datetime.now().strftime("%d/%m/%Y")
+
+    prompt = template.format(
+        name=name,
+        desc=desc,
+        tone=tone,
+        date=date
+    )
+
+    prompt = f"[LANG={language}]\n{prompt}"
+
+    # 4️⃣ LLM call
+    try:
+        text = call_gemini(prompt)
+        if not text:
+            raise ValueError("Empty response")
+    except Exception:
+        text = (
+            "AI writing is temporarily resting.\n\n"
+            "Please try again shortly."
         )
 
-        prompt = f"[LANG={language}]\n{prompt}"
+    return {
+        "response": text,
+        "blocked": False
+    }
 
-        # 4️⃣ LLM call with fallback
-        try:
-            text = call_gemini(prompt)
-            if not text:
-                raise ValueError("Empty response")
-        except Exception:
-            text = (
-                "AI writing is temporarily resting.\n\n"
-                "Please try again shortly."
-            )
-
-        return {"response": text}
 
     # -------------------------------------------------
     # SAFETY FILTER
     # -------------------------------------------------
     def safety_filter(self, text):
-        t = (text or "").lower()
+    t = (text or "").lower()
 
-        bad_words = [
-            "fuck", "bitch", "shit", "asshole",
-            "bastard", "slut", "dick", "pussy"
-        ]
-        for w in bad_words:
-            if w in t:
-                return False, "⚠️ Please rewrite using respectful language."
+    bad_words = [
+        "fuck", "bitch", "shit", "asshole",
+        "bastard", "slut", "dick", "pussy"
+    ]
+    for w in bad_words:
+        if w in t:
+            return False, "⚠️ Please rewrite using respectful language."
 
-        selfharm = [
-            "kill myself", "i want to die", "end my life",
-            "self harm", "no reason to live"
-        ]
-        for s in selfharm:
-            if s in t:
-                return False, (
-                    "⚠️ HeartNote AI cannot generate this.\n\n"
-                    "• You matter.\n"
-                    "• You are not alone.\n"
-                    "• Support is available."
-                )
+    selfharm = [
+        "kill myself", "i want to die", "end my life",
+        "self harm", "no reason to live"
+    ]
+    for s in selfharm:
+        if s in t:
+            return False, (
+                "⚠️ HeartNote AI cannot generate this.\n\n"
+                "• You matter.\n"
+                "• You are not alone.\n"
+                "• Support is available."
+            )
 
-        return True, text
+    return True, text
