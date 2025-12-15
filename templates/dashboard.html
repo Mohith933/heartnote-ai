@@ -1323,9 +1323,6 @@
         saveRecent(currentTool);
     }
 
-    // stop typing immediately
-    typingActive = false;
-
     // reset flags
     state.dataset.blocked = "false";
     state.dataset.viewing = "false";
@@ -1365,30 +1362,43 @@
     type();
 }
 
+function hasBadWords(text) {
+    const badWords = ["fuck", "shit", "bitch", "asshole", "slut", "dick"];
+    const t = text.toLowerCase();
+    return badWords.some(w => t.includes(w));
+}
 
 
-        async function generateContent() {
+
+async function generateContent() {
     const name = document.getElementById("nameInput").value.trim();
     const desc = document.getElementById("descInput").value.trim();
     const depth = document.getElementById("depthInput").value;
     const mode = document.getElementById("toolTitle").innerText.toLowerCase();
 
-    const settings = JSON.parse(localStorage.getItem("heartnote_settings")) || {};
-    const language = settings.language || "en";
-
     const outputBox = document.getElementById("output");
-    const state = document.getElementById("state");
 
-    // Reset flags
-    state.dataset.blocked = "false";
-    state.dataset.viewing = "false";
+    // ❗ Required fields
+    if (!name || !desc) {
+        alert("Please enter both title and description 💛");
+        return;
+    }
 
-    // ✅ loading message (HTML-safe)
+    // ❗ Bad words warning (no block)
+    if (hasBadWords(desc)) {
+        alert("Please use respectful words 🌱");
+        return;
+    }
+
+    // Loading state
     outputBox.innerHTML = "⏳ Generating…";
 
     let tone = "soft";
     if (depth === "medium") tone = "balanced";
     if (depth === "deep") tone = "deep";
+
+    const settings = JSON.parse(localStorage.getItem("heartnote_settings")) || {};
+    const language = settings.language || "en";
 
     const url =
         `/api/dashboard/?mode=${encodeURIComponent(mode)}` +
@@ -1399,29 +1409,18 @@
 
     try {
         const res = await fetch(url);
-        if (!res.ok) throw new Error("Server error");
+        if (!res.ok) throw new Error("LLM error");
 
         const data = await res.json();
+        const text = data?.response || "✨ Words are resting right now.";
 
-        const text =
-            typeof data === "string"
-                ? data
-                : data?.response || "AI is resting right now.";
-
-        // 🚫 Safety block
-        if (data?.blocked === true) {
-            state.dataset.blocked = "true";
-            outputBox.textContent = text; // NO typewriter
-            return;
-        }
-
-        // ✅ Clear once, then let typewriter own it
+        // Clear ONCE, then typewriter owns output
         outputBox.textContent = "";
         emotionalTypeWrite(text, "output", depth);
 
     } catch (err) {
-        state.dataset.blocked = "true";
-        outputBox.innerHTML = "⚠️ Unable to reach the AI right now.";
+        outputBox.textContent =
+            "✨ HeartNote is thinking quietly right now.\nPlease try again in a moment.";
     }
 }
 
