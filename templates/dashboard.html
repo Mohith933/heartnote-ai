@@ -1301,114 +1301,118 @@
             document.getElementById("workspaceView").classList.add("active");
         }
 
-         // 🔙 Go back and save current state (only if not viewing an old one)
+        // 🔙 Go back and save current state (only if not viewing an old one)
         function goBack() {
-    const state = document.getElementById("state");
+            const state = document.getElementById("state");
 
-    const workspace = document.getElementById("workspaceView");
-    const library = document.getElementById("libraryView");
-    const output = document.getElementById("output").innerText.trim();
+            const workspace = document.getElementById("workspaceView");
+            const library = document.getElementById("libraryView");
+            const output = document.getElementById("output").innerText.trim();
 
-    const isBlocked = state.dataset.blocked === "true";
-    const isViewingRecent = state.dataset.viewing === "true";
+            const isBlocked = state.dataset.blocked === "true";
+            const isViewingRecent = state.dataset.viewing === "true";
 
-    const hasValidContent =
-        output &&
-        output !== "Your writing will appear here..." &&
-        !isBlocked;
+            const hasValidContent =
+                output &&
+                output !== "Your writing will appear here..." &&
+                !isBlocked;
 
-    // ✅ Save ONLY clean generated content
-    if (!isViewingRecent && hasValidContent) {
-        const currentTool = document.getElementById("toolTitle").innerText.trim();
-        saveRecent(currentTool);
-    }
+            // ✅ Save ONLY clean generated content
+            if (!isViewingRecent && hasValidContent) {
+                const currentTool = document.getElementById("toolTitle").innerText.trim();
+                saveRecent(currentTool);
+            }
 
-    // reset flags
-    state.dataset.blocked = "false";
-    state.dataset.viewing = "false";
+            // reset flags
+            state.dataset.blocked = "false";
+            state.dataset.viewing = "false";
 
-    // switch view
-    workspace.classList.remove("active");
-    library.style.display = "block";
-    showRecents();
-}
-      let typingTimer = null;
-
-function emotionalTypeWrite(text, elementId, depth = "medium") {
-    const el = document.getElementById(elementId);
-    if (!el) return;
-
-    // 🔒 HARD STRING GUARANTEE
-    const safeText = typeof text === "string" ? text.trim() : "";
-
-    // Clear previous typing
-    if (typingTimer) {
-        clearTimeout(typingTimer);
-        typingTimer = null;
-    }
-
-    el.textContent = "";
-
-    if (!safeText) {
-        el.textContent = "The words are still forming.";
-        return;
-    }
-
-    const speed =
-        depth === "deep" ? 80 :
-        depth === "light" ? 35 : 55;
-
-    let i = 0;
-
-    function typeNext() {
-        if (i < safeText.length) {
-            el.textContent += safeText.charAt(i);
-            i++;
-            typingTimer = setTimeout(typeNext, speed);
+            // switch view
+            workspace.classList.remove("active");
+            library.style.display = "block";
+            showRecents();
         }
-    }
+        let typingTimer = null;
 
-    typeNext();
-}
+        function emotionalTypeWrite(text, elementId, depth = "medium") {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+
+            // 🔒 HARD STRING GUARANTEE
+            const safeText = typeof text === "string" ? text.trim() : "";
+
+            // Clear previous typing
+            if (typingTimer) {
+                clearTimeout(typingTimer);
+                typingTimer = null;
+            }
+
+            el.textContent = "";
+
+            if (!safeText) {
+                el.textContent = "The words are still forming.";
+                return;
+            }
+
+            const speed =
+                depth === "deep" ? 80 :
+                    depth === "light" ? 35 : 55;
+
+            let i = 0;
+
+            function typeNext() {
+                if (i < safeText.length) {
+                    el.textContent += safeText.charAt(i);
+                    i++;
+                    typingTimer = setTimeout(typeNext, speed);
+                }
+            }
+
+            typeNext();
+        }
 
 
-async function generateContent() {
-    const name = document.getElementById("nameInput").value.trim();
-    const desc = document.getElementById("descInput").value.trim();
-    const depth = document.getElementById("depthInput").value;
-    const mode = document.getElementById("toolTitle").innerText.toLowerCase();
+        async function generateContent() {
+            const name = document.getElementById("nameInput").value.trim();
+            const desc = document.getElementById("descInput").value.trim();
+            const depth = document.getElementById("depthInput").value;
+            const mode = document.getElementById("toolTitle").innerText.toLowerCase();
 
-    if (!name && !desc) {
-        alert("Please write something.");
-        return;
-    }
+            if (!name && !desc) {
+                alert("Please write something.");
+                return;
+            }
 
-    const settings = JSON.parse(localStorage.getItem("heartnote_settings")) || {};
-    const language = settings.language || "en";
+            const settings = JSON.parse(localStorage.getItem("heartnote_settings")) || {};
+            const language = settings.language || "en";
 
-    const output = document.getElementById("output");
-    output.innerHTML = "⏳ Generating...";
+            const output = document.getElementById("output");
+            output.innerHTML = "⏳ Generating...";
 
-    const url =
-        `/api/dashboard/?mode=${encodeURIComponent(mode)}` +
-        `&name=${encodeURIComponent(name)}` +
-        `&desc=${encodeURIComponent(desc)}` +
-        `&depth=${encodeURIComponent(depth)}` +
-        `&language=${encodeURIComponent(language)}`;
+            const url =
+                `/api/dashboard/?mode=${encodeURIComponent(mode)}` +
+                `&name=${encodeURIComponent(name)}` +
+                `&desc=${encodeURIComponent(desc)}` +
+                `&depth=${encodeURIComponent(depth)}` +
+                `&language=${encodeURIComponent(language)}`;
 
-const res = await fetch(url);
+            const res = await fetch(url);
 const data = await res.json();
 
 const state = document.getElementById("state");
 
-// 🔑 read backend truth
 const blocked = data.response.blocked === true;
-state.dataset.blocked = blocked ? "true" : "false";
+const isFallback = data.response.is_fallback === true;
+
+// 🔒 store control
+state.dataset.blocked = (blocked || isFallback) ? "true" : "false";
 
 const text = data.response.response.trim();
-emotionalTypeWrite(text, "output", depth);   
-}
+emotionalTypeWrite(text, "output", depth);
 
+
+
+        }
 
 
 
