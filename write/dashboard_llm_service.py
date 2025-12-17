@@ -269,7 +269,8 @@ class Dashboard_LLM_Service:
 
             return {
                 "response": raw.strip(),
-                "blocked": False
+                "blocked": False,
+                "is_fallback": False
             }
 
         except Exception:
@@ -279,6 +280,7 @@ class Dashboard_LLM_Service:
                     "Please try again in a moment."
                 ),
                 "blocked": False
+                "is_fallback": True
             }
 
     # -------------------------------------------------
