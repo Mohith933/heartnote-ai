@@ -279,7 +279,7 @@ class Dashboard_LLM_Service:
                     "The thoughts are still forming.\n\n"
                     "Please try again in a moment."
                 ),
-                "blocked": False
+                "blocked": False,
                 "is_fallback": True
             }
 
