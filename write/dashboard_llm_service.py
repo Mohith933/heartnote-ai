@@ -242,12 +242,7 @@ FALLBACK_CONTENT = {
             "The feeling arrived\nlayered with memory\nmoving through silence\nwithout leaving a name.",
             "An emotion stayed\nlonger than expected\nshaping the quiet\ninside."
         ]
-    }
-
-}
-
-FALLBACK_CONTENT.update({
-
+    },
     "letters": {
         "light": [
             "Dear {name},\n\nSome feelings arrive quietly.\n\nThis one stayed gentle, asking only to be acknowledged.",
@@ -323,7 +318,7 @@ FALLBACK_CONTENT.update({
         ]
     }
 
-})
+}
 # -----------------------------------------------------
 # LLM SERVICE (GEMINI)
 # -----------------------------------------------------
@@ -411,7 +406,7 @@ class Dashboard_LLM_Service:
             return {
         "response": text,
         "blocked": False,
-        "is_fallback": True
+        "is_fallback": False
     }
 
     # -------------------------------------------------
