@@ -223,26 +223,26 @@ FALLBACK_CONTENT = {
     # -------------------------------------------------
     "journal": {
         "light": [
-            "Date: {date} — Today felt gentle and slow, with a quiet emotion staying nearby, never asking for attention.",
-            "Date: {date} — The day passed calmly, carrying a soft emotional tone that lingered without explanation.",
-            "Date: {date} — Nothing stood out strongly today, yet a mild feeling followed along."
+            "Date: {date}\n\nToday felt gentle and slow, with a quiet emotion staying nearby, never asking for attention.",
+            "Date: {date}\n\nThe day passed calmly, carrying a soft emotional tone that lingered without explanation.",
+            "Date: {date}\n\nNothing stood out strongly today, yet a mild feeling followed along."
         ],
         "medium": [
-            "Date: {date} — A steady emotional rhythm shaped the day, calm and grounded, offering space to notice.",
-            "Date: {date} — The feeling appeared briefly and stayed present, neutral and reflective.",
-            "Date: {date} — Today held emotional balance, neither heavy nor light, just real."
+            "Date: {date}\n\nA steady emotional rhythm shaped the day, calm and grounded, offering space to notice.",
+            "Date: {date}\n\nThe feeling appeared briefly and stayed present, neutral and reflective.",
+            "Date: {date}\n\nToday held emotional balance, neither heavy nor light, just real."
         ],
         "deep": [
-            "Date: {date} — The emotion felt layered today, carrying memory and quiet depth throughout the hours.",
-            "Date: {date} — Some feelings resist clarity; this one stayed, deep and steady.",
-            "Date: {date} — The day carried emotional weight, unresolved yet calm."
+            "Date: {date}\n\nThe emotion felt layered today, carrying memory and quiet depth throughout the hours.",
+            "Date: {date}\n\nSome feelings resist clarity; this one stayed, deep and steady.",
+            "Date: {date}\n\nThe day carried emotional weight, unresolved yet calm."
         ]
     },
 
     # -------------------------------------------------
     # POEM (3–4 lines max)
     # -------------------------------------------------
-    "poem": {
+    "poems": {
         "light": [
             "A quiet feeling\nrested briefly\nthen moved on.",
             "The heart noticed\nsomething small\nand let it stay."
@@ -260,18 +260,18 @@ FALLBACK_CONTENT = {
     # -------------------------------------------------
     # LETTER (1 paragraph, starts with Dear you,)
     # -------------------------------------------------
-    "letter": {
+    "letters": {
         "light": [
-            "Dear you, this feeling arrived gently and stayed quietly, not asking for change, only space to exist.",
-            "Dear you, there was no urgency in this emotion, just a soft presence resting calmly."
+            "Dear {name}, this feeling arrived gently and stayed quietly, not asking for change, only space to exist.",
+            "Dear {name}, there was no urgency in this emotion, just a soft presence resting calmly."
         ],
         "medium": [
-            "Dear you, the emotion unfolded slowly, grounded and sincere, holding the moment steady.",
-            "Dear you, this feeling stayed present, calm and real, without needing explanation."
+            "Dear {name}, the emotion unfolded slowly, grounded and sincere, holding the moment steady.",
+            "Dear {name}, this feeling stayed present, calm and real, without needing explanation."
         ],
         "deep": [
-            "Dear you, some emotions carry memory, and this one stayed quietly, layered and unresolved.",
-            "Dear you, the feeling lingered longer than expected, deep yet calm."
+            "Dear {name}, some emotions carry memory, and this one stayed quietly, layered and unresolved.",
+            "Dear {name}, the feeling lingered longer than expected, deep yet calm."
         ]
     },
 
@@ -296,7 +296,7 @@ FALLBACK_CONTENT = {
     # -------------------------------------------------
     # QUOTE (1 sentence)
     # -------------------------------------------------
-    "quote": {
+    "quotes": {
         "light": [
             "Some feelings exist without needing explanation.",
             "Quiet emotions still matter."
@@ -332,7 +332,7 @@ FALLBACK_CONTENT = {
     # -------------------------------------------------
     # NOTES (STRICT BULLET FORMAT)
     # -------------------------------------------------
-    "note": {
+    "notes": {
         "light": [
             "• What you felt: a quiet emotional shift\n• Why it happened: internal awareness\n• What could help: gentle space",
             "• What you felt: mild emotional presence\n• Why it happened: emotional pause\n• What could help: calm reflection"
@@ -425,7 +425,7 @@ class Dashboard_LLM_Service:
             fallback_mode = FALLBACK_CONTENT.get(mode, {})
             fallback_list = fallback_mode.get(depth, [])
             if fallback_list:
-                text = random.choice(fallback_list).format(date=date)
+                text = random.choice(fallback_list).format(date=date,name=name)
             else:
                 text = (
             "The words feel quiet right now.\n\n"
