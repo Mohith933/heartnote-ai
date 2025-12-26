@@ -2,10 +2,13 @@
     "name": "HeartNote AI",
     "short_name": "HeartNote",
     "start_url": "/",
+    "id": "/",
     "display": "standalone",
     "background_color": "#0f172a",
     "theme_color": "#6366f1",
     "orientation": "portrait",
+    "description": "HeartNote AI is a calm emotional space for journaling, reflections, letters, and mindful writing.",
+    "categories": ["health", "lifestyle", "productivity"],
     "icons": [
         {
             "src": "/static/icons/icon-192.png",
@@ -17,5 +20,14 @@
             "sizes": "512x512",
             "type": "image/png"
         }
-    ]
+    ],
+    "screenshots": [
+  {
+    "src": "/static/screenshots/Letter.png",
+    "sizes": "1280x730",
+    "type": "image/png"
+  }
+]
+
+
 }
