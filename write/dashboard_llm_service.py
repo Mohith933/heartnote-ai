@@ -482,9 +482,9 @@ FALLBACK_CONTENT = {
 }
 
 def get_suggested_desc(mode, depth, original_desc):
-        suggestions = SUGGESTION_CONTENT.get(mode, {}).get(depth, [])
-        if suggestions:
-            return random.choice(suggestions)
+    suggestions = SUGGESTION_CONTENT.get(mode, {}).get(depth, [])
+    if suggestions:
+        return random.choice(suggestions)
     return original_desc
 
 # -----------------------------------------------------
