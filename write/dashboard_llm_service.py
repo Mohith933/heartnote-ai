@@ -482,6 +482,7 @@ FALLBACK_CONTENT = {
 }
 
 
+
 # -----------------------------------------------------
 # LLM SERVICE (GEMINI)
 # -----------------------------------------------------
@@ -490,13 +491,19 @@ class Dashboard_LLM_Service:
     def __init__(self, model=GEMINI_MODEL):
         self.model = genai.GenerativeModel(model)
 
+    def get_suggested_desc(mode, depth, original_desc):
+        suggestions = SUGGESTION_CONTENT.get(mode, {}).get(depth, [])
+        if suggestions:
+            return random.choice(suggestions)
+    return original_desc
+
+
     # -------------------------------------------------
     # MAIN GENERATE
     # -------------------------------------------------
     def generate(self, mode, name, desc, depth, language):
         mode = (mode or "").lower().strip()
         depth = (depth or "light").lower().strip()
-        safe_desc = (desc or "").strip()
         language = (language or "en").lower().strip()
         tone = DEPTH_TONE.get(depth, DEPTH_TONE["light"])
 
@@ -560,8 +567,9 @@ class Dashboard_LLM_Service:
         except Exception:
             fallback_mode = FALLBACK_CONTENT.get(mode, {})
             fallback_list = fallback_mode.get(depth, [])
+            suggested_desc = get_suggested_desc(mode, depth, safe_desc)
             if fallback_list:
-                text = random.choice(fallback_list).format(date=date,name=name,desc=safe_desc)
+                text = random.choice(fallback_list).format(date=date,name=name,desc=sugesstion_desc)
             else:
                 text = (
             "The words feel quiet right now.\n\n"
