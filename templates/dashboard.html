@@ -1564,96 +1564,97 @@
 
 
 
-        // 📌 Helper function to move suggestion logic out of suggestFeeling
-        function generateSuggestionContent() {
-            const mode = currentMode();
-            let emotions = [];
+       function generateSuggestionContent() {
+    const mode = currentMode();
+    let emotions = [];
 
-            switch (mode) {
-                case "reflection":
-                    emotions = [
-                        "a sense of calm returning 🌿, learning slowly, accepting what I cannot change",
-                        "mistakes becoming lessons ✨, fear turning into clarity, breathing deeper again",
-                        "pausing to understand myself 🍃, letting thoughts settle, finding inner balance",
-                        "softly healing my past 🌙, learning patience, trusting the timing of life"
-                    ];
-                    break;
+    switch (mode) {
 
-                case "journal":
-                    emotions = [
-                        "proud of my small steps 🌱, hopeful for tomorrow, growing quietly within",
-                        "messy feelings today 🌧️, still choosing strength, still choosing me",
-                        "thoughts a little heavy ⚖️, heart still trying, hope still alive",
-                        "every setback teaches 📘, every moment shapes me, I'm becoming stronger"
-                    ];
-                    break;
+        case "reflection":
+            emotions = [
+                "a calm sense returning",
+                "quiet peace settling in",
+                "soft awareness growing",
+                "accepting things as they are"
+            ];
+            break;
 
-                case "notes":
-                    emotions = [
-                        "a gentle reminder to care for myself 💛, tiny hope still alive, breathing through the chaos",
-                        "confidence growing softly 🌼, progress even in silence, kindness to myself always",
-                        "pausing, resetting, restarting 🔄, I am allowed to rest, I am allowed to heal",
-                        "quiet courage inside me 🌟, choosing truth, choosing peace"
-                    ];
-                    break;
+        case "journal":
+            emotions = [
+                "small progress noticed today",
+                "gentle emotions passing through",
+                "a calm rhythm forming",
+                "thoughts staying reflective"
+            ];
+            break;
 
-                case "affirmation":
-                    emotions = [
-                        "I trust myself 💪, I honor my journey, I am becoming who I need",
-                        "I am enough 🌸, love surrounds me, peace is finding me today",
-                        "strength lives in me 🔥, healing flows through me, hope guides me",
-                        "I choose me ❤️, I deserve kindness, I am growing beautifully"
-                    ];
-                    break;
+        case "notes":
+            emotions = [
+                "gentle care for myself",
+                "quiet reassurance",
+                "steady emotional presence",
+                "allowing space to breathe"
+            ];
+            break;
 
-                case "letters":
-                    emotions = [
-                        "grateful for what we had 💌, healing slowly, choosing peace from now on",
-                        "words I never said 💭, forgiveness I still hold, love growing softer",
-                        "missing what was 🌙, accepting what is, letting time heal the rest",
-                        "your memory still warm ✉️, truth still gentle, hearts still learning"
-                    ];
-                    break;
+        case "affirmation":
+            emotions = [
+                "I am allowed to move slowly",
+                "I remain grounded",
+                "I trust my pace",
+                "stillness feels safe"
+            ];
+            break;
 
-                case "poems":
-                    emotions = [
-                        "a heart learning to feel again 💖, stars guiding lost souls, beauty in broken pieces",
-                        "tears like poetry 🌧️, love like gentle fire, hope like dawn",
-                        "silence speaking softly 🌑, dreams glowing quietly, tomorrow blooming again",
-                        "melodies of healing 🎵, light through cracks, courage in softness"
-                    ];
-                    break;
+        case "letters":
+            emotions = [
+                "warm memories lingering",
+                "gentle connection felt",
+                "unspoken feelings resting",
+                "quiet appreciation staying"
+            ];
+            break;
 
-                case "story":
-                    emotions = [
-                        "a hero finding courage 🛡️, destiny shifting forward, wounds becoming power",
-                        "a quiet turning point ✨, where pain teaches strength, and hearts keep beating",
-                        "adventure rising again 🌄, fear slowly fading, bravery learning its voice",
-                        "chapters of growth 📖, plots of healing, endings becoming beginnings"
-                    ];
-                    break;
+        case "poems":
+            emotions = [
+                "soft light returning",
+                "silence holding meaning",
+                "emotion standing quietly",
+                "gentle hope drifting"
+            ];
+            break;
 
-                case "quotes":
-                    emotions = [
-                        "healing isn’t loud 🌟, progress isn’t seen, love isn’t rushed",
-                        "let go of what hurts 🍂, hold on to what heals, trust the journey",
-                        "the strongest hearts are soft 💫, the bravest souls are gentle",
-                        "peace is a practice 🕊️, hope is a habit, love is a choice"
-                    ];
-                    break;
+        case "story":
+            emotions = [
+                "a calm turn of events",
+                "quiet moments passing",
+                "emotion grounding the scene",
+                "a soft transition unfolding"
+            ];
+            break;
 
-                default:
-                    emotions = [
-                        "today I feel a soft hope 🌷, a gentle step, a quiet courage",
-                        "peace in small things 🌻, comfort in silence, love in healing",
-                        "slow progress is progress 🐢, calm is strength, softness is power",
-                        "breathing deeper again 💚, making space for good things, letting stress fade"
-                    ];
-            }
+        case "quotes":
+            emotions = [
+                "soft moments matter",
+                "calm has strength",
+                "presence is enough",
+                "stillness holds meaning"
+            ];
+            break;
 
-            const randomIndex = Math.floor(Math.random() * emotions.length);
-            return emotions[randomIndex];
-        }
+        default:
+            emotions = [
+                "a quiet emotional moment",
+                "calm awareness",
+                "gentle presence",
+                "soft reflection"
+            ];
+    }
+
+    const randomIndex = Math.floor(Math.random() * emotions.length);
+    return emotions[randomIndex];
+}
+
         function currentMode() {
             const tool = document.getElementById("toolTitle").innerText.toLowerCase();
 
