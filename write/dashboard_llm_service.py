@@ -504,14 +504,14 @@ FALLBACK_CONTENT = {
         ],
         "medium": [
             "Balance within {desc} is steady.",
-            "I trust the emotional pace of {desc}.",
+            "The emotional pace of {desc} can be trusted.",
             "Clarity through {desc} can form slowly.",
             "Presence shaped by {desc} is grounding."
         ],
         "deep": [
-            "Unresolved emotions within {desc} are valid.",
+            "Unresolved emotions within {desc} are allowed.",
             "Depth shaped by {desc} needs no answers.",
-            "Stillness within {desc} is safe.",
+            "Stillness within {desc} can remain.",
             "Silence through {desc} holds meaning."
         ]
     },
@@ -521,22 +521,22 @@ FALLBACK_CONTENT = {
     # --------------------------------
     "notes": {
         "light": [
-            "• What you felt: gentle emotional calm around {desc}\n• Why it happened: quiet awareness\n• What could help: allowing space",
-            "• What you felt: light emotional ease within {desc}\n• Why it happened: natural pacing\n• What could help: rest",
-            "• What you felt: calm presence shaped by {desc}\n• Why it happened: emotional softness\n• What could help: patience",
+            "• What you felt: gentle emotional calm around {desc}\n• Why it happened: quiet awareness\n•• What remained: space",
+            "• What you felt: light emotional ease within {desc}\n• Why it happened: natural pacing\n• What remained: rest",
+            "• What you felt: calm presence shaped by {desc}\n• Why it happened: emotional softness\n• What remained: patience",
             "• What you felt: steady calm tied to {desc}\n• Why it happened: acceptance\n• What could help: breathing space"
         ],
         "medium": [
-            "• What you felt: balanced emotional awareness in {desc}\n• Why it happened: grounding\n• What could help: reflection",
-            "• What you felt: steady emotions shaped by {desc}\n• Why it happened: inner balance\n• What could help: staying present",
-            "• What you felt: calm emotional rhythm in {desc}\n• Why it happened: clarity\n• What could help: focus",
-            "• What you felt: emotional steadiness within {desc}\n• Why it happened: stability\n• What could help: routine"
+            "• What you felt: balanced emotional awareness in {desc}\n• Why it happened: grounding\n• What remained: reflection",
+            "• What you felt: steady emotions shaped by {desc}\n• Why it happened: inner balance\n• What remained: staying present",
+            "• What you felt: calm emotional rhythm in {desc}\n• Why it happened: clarity\n• What remained: focus",
+            "• What you felt: emotional steadiness within {desc}\n• Why it happened: stability\n• What remained: routine"
         ],
         "deep": [
-            "• What you felt: unresolved depth tied to {desc}\n• Why it happened: inner complexity\n• What could help: stillness",
-            "• What you felt: silent emotional weight within {desc}\n• Why it happened: reflection\n• What could help: time",
-            "• What you felt: deep emotional presence in {desc}\n• Why it happened: memory\n• What could help: patience",
-            "• What you felt: layered emotion shaped by {desc}\n• Why it happened: awareness\n• What could help: space"
+            "• What you felt: unresolved depth tied to {desc}\n• Why it happened: inner complexity\n• What remained: stillness",
+            "• What you felt: silent emotional weight within {desc}\n• Why it happened: reflection\n• What remained: time",
+            "• What you felt: deep emotional presence in {desc}\n• Why it happened: memory\n• What remained: patience",
+            "• What you felt: layered emotion shaped by {desc}\n• Why it happened: awareness\n• What remained: space"
         ]
     }
 }
