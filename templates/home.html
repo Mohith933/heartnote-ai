@@ -220,6 +220,13 @@
       font-size: 1rem;
       opacity: 0.9;
     }
+.helper-text {
+    margin-top: 10px;
+    font-size: 13px;
+    color: #9ca3af;   /* soft gray */
+    text-align: center;
+    letter-spacing: 0.3px;
+}
 
     /* Footer */
     footer {
@@ -278,7 +285,8 @@
   <section class="hero" id="home">
     <h1>HeartNote AI — Creative Writer</h1>
     <p>HeartNote helps you express your real-life emotions and thoughts — from personal writings to social stories and lifestyle reflections.</p>
-    <a href="{% url 'aiwrite' %}" class="hero-btn">Try Free 💗</a>
+    <a href="{% url 'aiwrite' %}" class="hero-btn">Start Writing 💗</a>
+<p class="helper-text">No signup required</p>
   </section>
 
   <section class="features" id="features">
