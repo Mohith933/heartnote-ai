@@ -5,14 +5,15 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-   <link rel="icon" type="image/x-icon" href="{% static 'icons/favicon.ico' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'icons/favicon.ico' %}">
     <title>HeartNote AI — Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link
-        href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Caveat:wght@400;600&family=Shadows+Into+Light&family=Dancing+Script:wght@400;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Caveat:wght@400;600&family=Kalam&family=Dancing+Script:wght@400;600&display=swap"
         rel="stylesheet">
     <link rel="manifest" href="{% static 'pwa/manifest.json' %}">
-    <meta name="theme-color" content="#ff4d6d">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#141414">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
     <style>
         body[data-theme="light"] {
             --accent: #ff4d6d;
@@ -49,7 +50,7 @@
         .festival-popup {
     position: fixed;
     bottom: 20px;
-    left: 50%;
+    left: 55%;
     transform: translateX(-50%);
     background:var(--bg);
     color:var(--text);
@@ -527,9 +528,6 @@
         .card:hover {
             transform: translateY(-4px);
         }
-.card:active {
-  transform: scale(0.98);
-}
 
         .card-icon {
             font-size: 28px;
@@ -632,7 +630,7 @@
         }
 
         .output {
-            font-family: 'Caveat', cursive;
+            font-family: 'Inter', system-ui, sans-serif;
             font-size: 1.1rem;
             line-height: 1.8;
             letter-spacing: 0.3px;
@@ -868,7 +866,7 @@
         }
 
         .font-journal {
-            font-family: 'Shadows Into Light', cursive;
+            font-family: 'Kalam', cursive;
         }
 
         .handwrite-fade {
@@ -932,6 +930,10 @@
             .sidebar {
                 display: none;
             }
+            .festival-popup{
+                left:50%;
+                font-size: medium;
+            }
 
             .main {
                 margin: 0;
@@ -977,10 +979,10 @@
                     <div class="dropdown-content">
                         <a href="#" id="menu-dashboard" onclick="openTool('Dashboard'); setActiveMenu(this)">🏠
                             Dashboard</a>
-                        <a href="#" onclick="openTool('Reflection'); setActiveMenu(this)">🌿 Reflection</a>
-                        <a href="#" onclick="openTool('Journal'); setActiveMenu(this)">📖 Journal</a>
-                        <a href="#" onclick="openTool('Affirmation'); setActiveMenu(this)">🌈 Affirmation</a>
-                        <a href="#" onclick="openTool('Notes'); setActiveMenu(this)">📝 Notes</a>
+                        <a href="#" onclick="confirmExitWhileWriting(() => openTool('Reflection')); setActiveMenu(this)">🌿 Reflection</a>
+                        <a href="#" onclick="confirmExitWhileWriting(() => openTool('Journal')); setActiveMenu(this)">📖 Journal</a>
+                        <a href="#" onclick="confirmExitWhileWriting(() => openTool('Affirmation')); setActiveMenu(this)">🌈 Affirmation</a>
+                        <a href="#" onclick="confirmExitWhileWriting(() => openTool('Notes')); setActiveMenu(this)">📝 Notes</a>
                     </div>
                 </div>
 
@@ -988,10 +990,10 @@
                 <div class="menu-group">
                     <button class="dropdown-btn">💞 Heart & Emotion ▾</button>
                     <div class="dropdown-content">
-                        <a href="#" onclick="openTool('Letters'); setActiveMenu(this)">💌 Letters</a>
-                        <a href="#" onclick="openTool('Poems'); setActiveMenu(this)">🪶 Poems</a>
-                        <a href="#" onclick="openTool('Story'); setActiveMenu(this)">✨ Story</a>
-                        <a href="#" onclick="openTool('Quotes'); setActiveMenu(this)">💭 Quotes</a>
+                        <a href="#" onclick="confirmExitWhileWriting(() => openTool('Letters')); setActiveMenu(this)">💌 Letters</a>
+                        <a href="#" onclick="confirmExitWhileWriting(() => openTool('Poems')); setActiveMenu(this)">🪶 Poems</a>
+                        <a href="#" onclick="confirmExitWhileWriting(() => openTool('Story')); setActiveMenu(this)">✨ Story</a>
+                        <a href="#" onclick="confirmExitWhileWriting(() => openTool('Quotes')); setActiveMenu(this)">💭 Quotes</a>
                     </div>
                 </div>
             </nav>
@@ -1007,7 +1009,7 @@
             <h1 id="welcomeText">Welcome!</h1>
 
             <div class="avatar-container">
-                <img class="avatar" id="dashboardAvatar" onclick="openTool('Accounts')"
+               <img class="avatar" onclick="confirmExitWhileWriting(() => openTool('Accounts'))"
                     src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23ffe4e6'/%3E%3Cpath d='M32 22c3-6 12-6 15 0 3-6-1 14-15 22-14-8-18-16-15-22 3-6 12-6 15 0z' fill='%23e11d48'/%3E%3C/svg%3E" />
             </div>
         </div>
@@ -1111,13 +1113,6 @@
                     </select>
                 </label>
                 <label class="toggle-row">
-                    <span>Auto Save</span>
-                    <label class="switch">
-                        <input type="checkbox" id="autoSaveToggle" checked>
-                        <span class="slider"></span>
-                    </label>
-                </label>
-                <label class="toggle-row">
                     <span>Language</span>
                     <select id="uiLanguage" class="select-style">
                         <option value="en">English</option>
@@ -1177,7 +1172,10 @@
         <!-- Tool Workspace -->
         <!-- Tool Workspace -->
         <div id="workspaceView" class="workspace">
-            <button class="back-btn" onclick="goBack()">← Back to Tools</button>
+            <button class="back-btn" onclick="confirmExitWhileWriting(goBack)">
+    ← Back to Tools
+</button>
+
             <div class="form-container">
                 <div class="form-section">
                     <h3 id="toolTitle">Reflection</h3>
@@ -1225,6 +1223,7 @@
     </main>
 
     <script>
+        let isWriting = false;
         const username = localStorage.getItem('heartnote_username');
         if (username) {
             document.getElementById('welcomeText').innerText = `Welcome, ${username} 💞`;
@@ -1404,44 +1403,33 @@
         let typingTimer = null;
 
         function emotionalTypeWrite(text, elementId, depth = "medium") {
-            const el = document.getElementById(elementId);
-            if (!el) return;
+    const el = document.getElementById(elementId);
+    if (!el) return;
 
-            // 🔒 HARD STRING GUARANTEE
-            const safeText = typeof text === "string" ? text.trim() : "";
+    const safeText = typeof text === "string" ? text.trim() : "";
+    el.textContent = "";
 
-            // Clear previous typing
-            if (typingTimer) {
-                clearTimeout(typingTimer);
-                typingTimer = null;
-            }
+    let i = 0;
+    const speed = depth === "deep" ? 80 : depth === "light" ? 35 : 55;
 
-            el.textContent = "";
-
-            if (!safeText) {
-                el.textContent = "The words are still forming.";
-                return;
-            }
-
-            const speed =
-                depth === "deep" ? 80 :
-                    depth === "light" ? 35 : 55;
-
-            let i = 0;
-
-            function typeNext() {
-                if (i < safeText.length) {
-                    el.textContent += safeText.charAt(i);
-                    i++;
-                    typingTimer = setTimeout(typeNext, speed);
-                }
-            }
-
-            typeNext();
+    function typeNext() {
+        if (i < safeText.length) {
+            el.textContent += safeText.charAt(i);
+            i++;
+            typingTimer = setTimeout(typeNext, speed);
+        } else {
+            // ✅ typing finished
+            isWriting = false;
         }
+    }
+
+    typeNext();
+}
+
 
 
         async function generateContent() {
+            isWriting = true;
             const name = document.getElementById("nameInput").value.trim();
             const desc = document.getElementById("descInput").value.trim();
             const depth = document.getElementById("depthInput").value;
@@ -1456,7 +1444,7 @@
             const language = settings.language || "en";
 
             const output = document.getElementById("output");
-            output.innerHTML = "⏳ Generating...";
+            output.innerHTML = "✍️ Generating...";
 
             const url =
                 `/api/dashboard/?mode=${encodeURIComponent(mode)}` +
@@ -1479,9 +1467,25 @@
             const text = data.response.response.trim();
             emotionalTypeWrite(text, "output", depth);
 
-
-
         }
+
+        function confirmExitWhileWriting(action) {
+    if (!isWriting) {
+        action();
+        return;
+    }
+
+    const choice = confirm(
+        "✍️ I'm still writing for you...\n\n" +
+        "If you leave now, this writing will stop and won't be saved.\n\n" +
+        "Do you want to continue?"
+    );
+
+    if (choice) {
+        isWriting = false;
+        action();
+    }
+}
 
 
 
@@ -1567,90 +1571,91 @@
 
 
 
-       function generateSuggestionContent() {
+        // 📌 Helper function to move suggestion logic out of suggestFeeling
+        // 📌 Helper function to move suggestion logic out of suggestFeeling
+function generateSuggestionContent() {
     const mode = currentMode();
     let emotions = [];
 
     switch (mode) {
-
         case "reflection":
             emotions = [
-                "a calm sense returning",
-                "quiet peace settling in",
-                "soft awareness growing",
-                "accepting things as they are"
+                "a sense of calm returning, learning slowly, accepting what I cannot change",
+                "mistakes becoming lessons, fear turning into clarity, breathing deeper again",
+                "pausing to understand myself, letting thoughts settle, finding inner balance",
+                "softly healing my past, learning patience, trusting the timing of life"
             ];
             break;
 
         case "journal":
             emotions = [
-                "small progress noticed today",
-                "gentle emotions passing through",
-                "a calm rhythm forming",
-                "thoughts staying reflective"
+                "proud of my small steps, hopeful for tomorrow, growing quietly within",
+                "messy feelings today, still choosing strength, still choosing myself",
+                "thoughts feel heavy today, yet I keep moving forward with care",
+                "every setback teaches something, every moment shapes who I am becoming"
             ];
             break;
 
         case "notes":
             emotions = [
-                "gentle care for myself",
-                "quiet reassurance",
-                "steady emotional presence",
-                "allowing space to breathe"
+                "a gentle reminder to care for myself, even when things feel overwhelming",
+                "confidence growing slowly, progress happening even in silence",
+                "pausing, resetting, starting again, allowing myself to rest",
+                "quiet courage within me, choosing honesty, choosing peace"
             ];
             break;
 
         case "affirmation":
             emotions = [
-                "I am allowed to move slowly",
-                "I remain grounded",
-                "I trust my pace",
-                "stillness feels safe"
+                "I trust myself and the path I am walking",
+                "I am enough as I am, and I allow myself to grow",
+                "strength and healing exist within me",
+                "I choose kindness toward myself today"
             ];
             break;
 
         case "letters":
             emotions = [
-                "warm memories lingering",
-                "gentle connection felt",
-                "unspoken feelings resting",
-                "quiet appreciation staying"
+                "grateful for what we shared, healing slowly, choosing peace now",
+                "words I never said, feelings I still hold, learning to forgive",
+                "missing what was, accepting what is, letting time do its work",
+                "your memory remains gentle, and I am learning to move forward"
             ];
             break;
 
         case "poems":
             emotions = [
-                "soft light returning",
-                "silence holding meaning",
-                "emotion standing quietly",
-                "gentle hope drifting"
+                "a heart learning how to feel again, finding beauty in broken moments",
+                "tears turning into language, love softening with time",
+                "silence speaking quietly, dreams returning in small ways",
+                "healing unfolding slowly, light finding its way in"
             ];
             break;
 
         case "story":
             emotions = [
-                "a calm turn of events",
-                "quiet moments passing",
-                "emotion grounding the scene",
-                "a soft transition unfolding"
+                "a turning point where pain becomes strength",
+                "a quiet beginning after a difficult chapter",
+                "fear slowly loosening its grip as courage grows",
+                "an ending that gently becomes a new beginning"
             ];
             break;
 
         case "quotes":
             emotions = [
-                "soft moments matter",
-                "calm has strength",
-                "presence is enough",
-                "stillness holds meaning"
+                "healing does not need noise to be real",
+                "letting go is also a form of strength",
+                "soft hearts often carry the greatest courage",
+                "peace is built through small, intentional moments"
             ];
             break;
 
         default:
             emotions = [
-                "a quiet emotional moment",
-                "calm awareness",
-                "gentle presence",
-                "soft reflection"
+                "today feels quieter, slower, and more manageable",
+                "finding comfort in small moments and simple breaths",
+                "progress does not need to be rushed to matter",
+                "making space for calm and gentle thoughts"
             ];
     }
 
@@ -1951,7 +1956,7 @@
             }
         }
         function applyHandwriting(fontName) {
-            const h1 = document.querySelector("p");
+            const h1 = document.querySelector(".output");
             h1.style.fontFamily = fontName;
 
             h1.classList.remove("handwriting-animate");
@@ -1983,20 +1988,6 @@
             document.documentElement.setAttribute("data-font", value);
         }
 
-
-        function loadAutoSave() {
-            const s = JSON.parse(localStorage.getItem("heartnote_settings")) || {};
-            const v = s.autoSave ?? true;
-            const el = document.getElementById("autoSaveToggle");
-            if (el) el.checked = v;
-        }
-
-        function saveAutoSave(value) {
-            const s = JSON.parse(localStorage.getItem("heartnote_settings")) || {};
-            s.autoSave = value;
-            localStorage.setItem("heartnote_settings", JSON.stringify(s));
-        }
-
         function loadLanguage() {
             const s = JSON.parse(localStorage.getItem("heartnote_settings")) || {};
             const v = s.language || "en";
@@ -2014,10 +2005,6 @@
             if (e.target.id === "fontSize") {
                 saveFontSize(e.target.value);
                 applyFontSize();   // ← REQUIRED
-            }
-
-            if (e.target.id === "autoSaveToggle") {
-                saveAutoSave(e.target.checked);
             }
 
             if (e.target.id === "uiLanguage") {
@@ -2148,8 +2135,6 @@
         document.querySelector(".avatar-edit").onclick = () => {
             document.getElementById("avatarInput").click();
         };
-
-
 
     </script>
 </body>
