@@ -632,7 +632,7 @@
         .output {
             font-family: 'Poppins', sans-serif;
             font-size: 1.1rem;
-            line-height: 1.8;
+            line-height: 1.6;
             letter-spacing: 0.3px;
             white-space: pre-wrap;
             color: var(--text);
@@ -1133,13 +1133,13 @@
 
             <div class="section-box" id="settingsPanel">
                 <h3>Settings</h3>
-                <label class="toggle-row">
-                    <span>Notifications</span>
-                    <label class="switch">
-                        <input type="checkbox" id="navToggle">
-                        <span class="slider"></span>
-                    </label>
-                </label>
+                <label class="toggle-row">  
+    <span>Notifications</span>  
+    <label class="switch">  
+        <input type="checkbox" id="notificationToggle">  
+        <span class="slider"></span>  
+    </label>  
+</label>
                 <label class="toggle-row">
                     <span>Theme</span>
                     <select id="themeMode" class="select-style">
@@ -2147,43 +2147,75 @@ function getCurrentLanguage() {
 
         document.addEventListener("DOMContentLoaded", () => {
 
-    // 🎉 Festival banner (respect notification toggle)
-    const navState = localStorage.getItem("nav-visible");
-    if (navState === "true") {
+    /* ----------------------------------
+       🔔 NOTIFICATION TOGGLE (PERSISTENT)
+    ---------------------------------- */
 
-        const festivals = {
-            "01-01": "🎉 New Beginnings — Happy New Year",
-            "02-14": "💛 Day of Care & Connection",
-            "03-25": "🌸 Holi — A Day of Renewal",
-            "04-14": "🌾 Harvest & Gratitude (Tamil New Year)",
-            "05-01": "🛠️ Honouring Effort & Growth (Labour Day)",
-            "06-21": "🧘 Calm the Mind — International Yoga Day",
-            "07-21": "🌧️ Monsoon Reflections & Reset",
-            "08-15": "🇮🇳 Freedom, Identity & Purpose",
-            "09-05": "📚 Gratitude for Guidance (Teachers’ Day)",
-            "10-02": "🕊️ Silence, Truth & Self-Discipline",
-            "11-12": "🪔 Light Over Noise — Diwali",
-            "12-25": "🎄 Warmth, Kindness & Closure"
-        };
+    const notificationToggle = document.getElementById("notificationToggle");
 
-        const defaultMessage = "🌱 A gentle day to reflect and write";
+    if (notificationToggle) {
+        // Load saved state (default = OFF)
+        const notifState = localStorage.getItem("notifications-enabled");
 
-        const today = new Date();
-        const key =
-            String(today.getMonth() + 1).padStart(2, "0") +
-            "-" +
-            String(today.getDate()).padStart(2, "0");
+        if (notifState === "true") {
+            notificationToggle.checked = true;
+        } else {
+            notificationToggle.checked = false;
+        }
 
-        const popup = document.getElementById("festivalPopup");
-        if (!popup) return;
-
-        popup.innerText = festivals[key] || defaultMessage;
-        popup.classList.remove("hidden");
-
-        setTimeout(() => {
-            popup.classList.add("hidden");
-        }, 5000);
+        // Save state on toggle
+        notificationToggle.addEventListener("change", () => {
+            localStorage.setItem(
+                "notifications-enabled",
+                notificationToggle.checked ? "true" : "false"
+            );
+        });
     }
+
+
+    /* ----------------------------------
+       🎉 FESTIVAL BANNER (RESPECT TOGGLE)
+    ---------------------------------- */
+
+    const festivals = {
+        "01-01": "🎉 New Beginnings — Happy New Year",
+        "02-14": "💛 Day of Care & Connection",
+        "03-25": "🌸 Holi — A Day of Renewal",
+        "04-14": "🌾 Harvest & Gratitude (Tamil New Year)",
+        "05-01": "🛠️ Honouring Effort & Growth (Labour Day)",
+        "06-21": "🧘 Calm the Mind — International Yoga Day",
+        "07-21": "🌧️ Monsoon Reflections & Reset",
+        "08-15": "🇮🇳 Freedom, Identity & Purpose",
+        "09-05": "📚 Gratitude for Guidance (Teachers’ Day)",
+        "10-02": "🕊️ Silence, Truth & Self-Discipline",
+        "11-12": "🪔 Light Over Noise — Diwali",
+        "12-25": "🎄 Warmth, Kindness & Closure"
+    };
+
+    const defaultMessage = "🌱 A gentle day to reflect and write";
+
+    const popup = document.getElementById("festivalPopup");
+    if (!popup) return;
+
+    // 🔐 Check notification permission
+    const notificationsEnabled =
+        localStorage.getItem("notifications-enabled") === "true";
+
+    if (!notificationsEnabled) return;
+
+    const today = new Date();
+    const key =
+        String(today.getMonth() + 1).padStart(2, "0") +
+        "-" +
+        String(today.getDate()).padStart(2, "0");
+
+    popup.innerText = festivals[key] || defaultMessage;
+    popup.classList.remove("hidden");
+
+    // Auto hide after 5s
+    setTimeout(() => {
+        popup.classList.add("hidden");
+    }, 5000);
 
 });
 
