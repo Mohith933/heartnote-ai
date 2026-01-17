@@ -255,13 +255,13 @@ FALLBACK_CONTENT = {
     # --------------------------------
     "letters": {
     "light": [
-        "Dear {name},\n\nThis feeling feels gentle and sincere, carrying warmth without needing many words.\n\nWarmth By,\n💗 HeartNote AI"
+        "Dear,\n\nThis feeling feels gentle and sincere, carrying warmth without needing many words.\n\nWarmth By,\n💗 HeartNote AI"
     ],
     "medium": [
-        "Dear {name},\n\nThis feeling holds balance and honesty, steady and thoughtful.\n\nWarmth By,\n💗 HeartNote AI"
+        "Dear,\n\nThis feeling holds balance and honesty, steady and thoughtful.\n\nWarmth By,\n💗 HeartNote AI"
     ],
     "deep": [
-        "Dear {name},\n\nThis feeling carries quiet depth, present without urgency or resolution.\n\nWarmth By,\n💗 HeartNote AI"
+        "Dear,\n\nThis feeling carries quiet depth, present without urgency or resolution.\n\nWarmth By,\n💗 HeartNote AI"
     ]
 },
 
@@ -390,16 +390,15 @@ FALLBACK_CONTENT_HI = {
 # --------------------------------
 "letters": {
     "light": [
-        "प्रिय {name},\n\nयह भावना कोमल और सच्ची लगती है, बिना अधिक शब्दों के भी अपनी गर्माहट बनाए रखती है।\n\nस्नेह सहित,\n💗 HeartNote AI"
+        "प्रिय,\n\nयह भावना कोमल और सच्ची लगती है, बिना अधिक शब्दों के भी अपनी गर्माहट बनाए रखती है।\n\nस्नेह सहित,\n💗 HeartNote AI"
     ],
     "medium": [
-        "प्रिय {name},\n\nयह भावना संतुलन और ईमानदारी के साथ ठहरी हुई है, शांत और विचारशील।\n\nस्नेह सहित,\n💗 HeartNote AI"
+        "प्रिय,\n\nयह भावना संतुलन और ईमानदारी लिए हुए है, स्थिर और विचारशील बनी रहती है।\n\nस्नेह सहित,\n💗 HeartNote AI"
     ],
     "deep": [
-        "प्रिय {name},\n\nयह भावना शांत गहराई लिए हुए है, बिना जल्दबाज़ी या समाधान के बस मौजूद।\n\nस्नेह सहित,\n💗 HeartNote AI"
+        "प्रिय,\n\nयह भावना शांत गहराई लिए हुए है, बिना किसी जल्दबाज़ी या समाधान के मौजूद रहती है।\n\nस्नेह सहित,\n💗 HeartNote AI"
     ]
 },
-
 # --------------------------------
 # STORY (25–45 words, max 2 sentences)
 # --------------------------------
