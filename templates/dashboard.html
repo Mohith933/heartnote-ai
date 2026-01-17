@@ -1516,7 +1516,7 @@ function emotionalTypeWrite(text, elementId, depth, onComplete) {
     }
 
     const settings = JSON.parse(localStorage.getItem("heartnote_settings")) || {};
-    const language = settings.language || "en";
+    const language = getCurrentLanguage();
 
     const output = document.getElementById("output");
     output.innerHTML = "✍️ Writing from the heart...";
@@ -2091,13 +2091,21 @@ function generateSuggestionContent() {
 
             document.documentElement.setAttribute("data-font", value);
         }
+document.addEventListener("DOMContentLoaded", () => {
+    loadLanguage();
+});
 
         function loadLanguage() {
-            const s = JSON.parse(localStorage.getItem("heartnote_settings")) || {};
-            const v = s.language || "en";
-            const el = document.getElementById("uiLanguage");
-            if (el) el.value = v;
-        }
+    const s = JSON.parse(localStorage.getItem("heartnote_settings")) || {};
+    const v = ["en", "hi"].includes(s.language) ? s.language : "en";
+    const el = document.getElementById("uiLanguage");
+    if (el) el.value = v;
+}
+
+function getCurrentLanguage() {
+    const s = JSON.parse(localStorage.getItem("heartnote_settings")) || {};
+    return s.language || "en";
+}
 
         function saveLanguage(value) {
             const s = JSON.parse(localStorage.getItem("heartnote_settings")) || {};
