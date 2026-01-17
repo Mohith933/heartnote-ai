@@ -1451,14 +1451,16 @@ if (typingInterval) {
             const isViewingRecent = state.dataset.viewing === "true";
 
             const hasValidContent =
-                output &&
-                output !== "Your writing will appear here..." &&
-                !isBlocked;
+    hasGeneratedContent &&
+    lastGeneratedText &&
+    !isViewingRecent;
 
             // ✅ Save ONLY clean generated content
             if (!isViewingRecent && hasValidContent) {
                 const currentTool = document.getElementById("toolTitle").innerText.trim();
                 saveRecent(currentTool);
+hasGeneratedContent = false;
+lastGeneratedText = "";
             }
 
             // reset flags
@@ -1473,6 +1475,7 @@ if (typingInterval) {
 let typingInterval = null;
 let isWriting = false;
 let lastGeneratedText = "";
+let hasGeneratedContent = false;
 function emotionalTypeWrite(text, elementId, depth, onComplete) {
     const el = document.getElementById(elementId);
     el.innerHTML = "";
@@ -1539,10 +1542,8 @@ function emotionalTypeWrite(text, elementId, depth, onComplete) {
         state.dataset.blocked = (blocked || isFallback) ? "true" : "false";
 
         const text = data.response.response.trim();
-
-        // ✅ SAVE FULL TEXT IMMEDIATELY (for leave/store logic)
-        lastGeneratedText = text;
-
+lastGeneratedText = text;
+hasGeneratedContent = true; // ✅ IMPORTANT
         emotionalTypeWrite(text, "output", depth, () => {
             isWriting = false;
         });
