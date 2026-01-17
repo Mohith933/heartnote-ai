@@ -2147,67 +2147,45 @@ function getCurrentLanguage() {
 
         document.addEventListener("DOMContentLoaded", () => {
 
-            const navToggle = document.getElementById("navToggle");
-            if (navToggle) {
+    // 🎉 Festival banner (respect notification toggle)
+    const navState = localStorage.getItem("nav-visible");
+    if (navState === "true") {
 
-                // load state
-                const navState = localStorage.getItem("nav-visible");
-                if (navState === "true") {
-    document.body.classList.remove("nav-hidden");
-    navToggle.checked = true;
-} else {
-    document.body.classList.add("nav-hidden");
-    navToggle.checked = false;
-}
+        const festivals = {
+            "01-01": "🎉 New Beginnings — Happy New Year",
+            "02-14": "💛 Day of Care & Connection",
+            "03-25": "🌸 Holi — A Day of Renewal",
+            "04-14": "🌾 Harvest & Gratitude (Tamil New Year)",
+            "05-01": "🛠️ Honouring Effort & Growth (Labour Day)",
+            "06-21": "🧘 Calm the Mind — International Yoga Day",
+            "07-21": "🌧️ Monsoon Reflections & Reset",
+            "08-15": "🇮🇳 Freedom, Identity & Purpose",
+            "09-05": "📚 Gratitude for Guidance (Teachers’ Day)",
+            "10-02": "🕊️ Silence, Truth & Self-Discipline",
+            "11-12": "🪔 Light Over Noise — Diwali",
+            "12-25": "🎄 Warmth, Kindness & Closure"
+        };
 
-                // toggle
-                navToggle.addEventListener("change", () => {
-                    if (navToggle.checked) {
-                        document.body.classList.remove("nav-hidden");
-                        localStorage.setItem("nav-visible", "true");
-                    } else {
-                        document.body.classList.add("nav-hidden");
-                        localStorage.setItem("nav-visible", "false");
-                    }
-                });
-            }
-            // 🎉 Festival banner (safe anywhere)
-            const festivals = {
-                "01-01": "🎉 New Beginnings — Happy New Year",
-                "02-14": "💛 Day of Care & Connection",
-                "03-25": "🌸 Holi — A Day of Renewal",
-                "04-14": "🌾 Harvest & Gratitude (Tamil New Year)",
-                "05-01": "🛠️ Honouring Effort & Growth (Labour Day)",
-                "06-21": "🧘 Calm the Mind — International Yoga Day",
-                "07-21": "🌧️ Monsoon Reflections & Reset",
-                "08-15": "🇮🇳 Freedom, Identity & Purpose",
-                "09-05": "📚 Gratitude for Guidance (Teachers’ Day)",
-                "10-02": "🕊️ Silence, Truth & Self-Discipline",
-                "11-12": "🪔 Light Over Noise — Diwali",
-                "12-25": "🎄 Warmth, Kindness & Closure"
-            };
-// 🌱 Default banner when no festival
-const defaultMessage = "🌱 A gentle day to reflect and write";
+        const defaultMessage = "🌱 A gentle day to reflect and write";
 
-            const today = new Date();
-const key =
-    String(today.getMonth() + 1).padStart(2, "0") +
-    "-" +
-    String(today.getDate()).padStart(2, "0");
+        const today = new Date();
+        const key =
+            String(today.getMonth() + 1).padStart(2, "0") +
+            "-" +
+            String(today.getDate()).padStart(2, "0");
 
-const popup = document.getElementById("festivalPopup");
-if (!popup) return;
+        const popup = document.getElementById("festivalPopup");
+        if (!popup) return;
 
-popup.innerText = festivals[key] || defaultMessage;
-popup.classList.remove("hidden");
+        popup.innerText = festivals[key] || defaultMessage;
+        popup.classList.remove("hidden");
 
-// auto-hide after 5 seconds
-setTimeout(() => {
-    popup.classList.add("hidden");
-}, 5000);
+        setTimeout(() => {
+            popup.classList.add("hidden");
+        }, 5000);
+    }
 
-
-        });
+});
 
         document.addEventListener("DOMContentLoaded", () => {
             const profileAvatar = document.getElementById("profileAvatar");
