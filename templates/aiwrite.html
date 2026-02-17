@@ -1,11 +1,10 @@
-{% load static %}
 <!DOCTYPE html>  
 <html lang="en">  
 <head>  
   <meta charset="utf-8" />  
   <meta name="viewport" content="width=device-width,initial-scale=1" />  
   <link rel="icon" type="image/x-icon" href="{% static 'icons/favicon.ico' %}">
-  <title>HeartNote AI — H1 (Creative Writer)</title>  
+  <title>NoteAI —  Meeting Notes Assistant</title>  
   
   <!-- Quicksand (Google Fonts) -->  
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">  
@@ -13,24 +12,25 @@
   <link rel="manifest" href="{% static 'pwa/manifest.json' %}">
 <meta name="theme-color" content="#ffffff" id="themeColorMeta">
   <style>  
-  :root{  
-      --bg: #fff;  
-      --text:#000;
-      --accent:  #ff4d6d;  
-      --muted: #e63950;  
---card: rgba(255,255,255,0.04);  
---glass: rgba(255,255,255,0.03);  
-    } 
+ :root{
+  --bg: #ffffff;
+  --text: #111827;
+  --accent: #2563eb;      /* Professional blue */
+  --muted: #1d4ed8;       /* Slightly deeper blue */
+  --card: rgba(0, 0, 0, 0.03);
+  --glass: rgba(0, 0, 0, 0.02);
+}
 
 body.dark {
-  --bg: #0e0e0f;
-  --text: #f9f9fb;
-  --accent: #ff5c8d;
-  --muted: #ff7da3;
-  --option:#000;
-  --card: rgba(255, 255, 255, 0.04);
-  --glass: rgba(255, 255, 255, 0.05);
+  --bg: #0f172a;
+  --text: #f8fafc;
+  --accent: #3b82f6;      /* Clean tech blue */
+  --muted: #2563eb;
+  --option: #000;
+  --card: rgba(255, 255, 255, 0.05);
+  --glass: rgba(255, 255, 255, 0.06);
 }
+
     *{box-sizing:border-box}  
     html,body{height:100%}  
     body{  
@@ -189,7 +189,7 @@ body.dark {
   
     .toolbar { display:flex; gap:8px; margin-top:10px; }  
   
-    .ghost { background:transparent; border:1px solid #ff4d6d; padding:8px 10px; border-radius:8px; color:#ff4d6d; cursor:pointer; }  
+    .ghost { background:transparent; border:1px solid #2563eb; padding:8px 10px; border-radius:8px; color:var(--text); cursor:pointer; }  
   
     /* History (right column) */  
     .history {  
@@ -272,17 +272,17 @@ body.dark {
   </style>  
 </head>  
 <body>  
-  <div class="app" role="application" aria-label="HeartNote AI">    
+  <div class="app" role="application" aria-label="NoteAI">   
   <div class="header">    
     <div class="brand" aria-hidden="true">    
-      <div class="heart">💞</div>    
-      <div>    
-        <div style="font-size:1.05rem">HeartNote AI</div>      
-        <div style="font-size:0.78rem; color:var(--accent); margin-top:4px">
-          Personal Writer
-        </div>
-      </div>    
-    </div>    
+      <div class="heart">📝</div>
+<div>
+  <div style="font-size:1.05rem">NoteAI</div>
+  <div style="font-size:0.78rem; color:var(--accent); margin-top:4px">
+    Meeting Notes Assistant
+  </div>
+</div> 
+    </div>
 
     <div class="actions">    
       <button class="btn" onclick="goHome()">←</button>
@@ -298,26 +298,24 @@ body.dark {
       <label for="mode">Mode</label>    
       <div class="controls">    
         <select id="mode" aria-label="Choose mode">
-          <option value="reflection">Reflection</option>  
-          <option value="journal">Journal</option>  
-          <option value="note">Note</option>  
-          <option value="affirmation">Affirmation</option>  
-          <option value="poem">Poem</option>  
-          <option value="story">Story</option>  
-          <option value="letter">Letter</option>  
-          <option value="quote">Quote</option>  
-        </select>  
+  <option value="summary">Meeting Summary</option>
+  <option value="keypoints">Key Points Extraction</option>
+  <option value="action">Action Items</option>
+  <option value="minutes">Meeting Minutes</option>
+  <option value="brainstorm">Brainstorm Summary</option>
+</select>
+  
       </div>    
 
-      <label for="prompt" style="margin-top:12px">Prompt (topic / few words)</label>    
-      <textarea id="prompt" placeholder="e.g. moonlight love, apology to a friend, product launch"></textarea>  
-      <button id="suggestBtn" class="suggest">Suggest ✨</button>  
+      <label for="prompt" style="margin-top:12px">Meeting Notes / Transcript</label>   
+   <textarea id="prompt" placeholder="Paste meeting transcript, discussion notes, or bullet points here..."></textarea>
+      <button id="suggestBtn" class="suggest">Auto Format</button>
 
       <div class="row" style="margin-top:12px; align-items:center;">    
         <div style="flex:1">    
-          <label for="emotion">Emotion depth</label>    
+          <label for="emotion">Detail Level</label>    
           <input id="emotion" type="range" min="0" max="100" value="50" />    
-          <div class="muted" id="emotionLabel">Balanced</div>    
+         <div class="muted" id="emotionLabel">Balanced Detail</div>  
         </div>    
 
         <div style="width:130px">    
@@ -327,7 +325,7 @@ body.dark {
       </div>    
 
       <div class="output" id="output" tabindex="0" aria-label="Generated output" style="font-size:1.15rem;">    
-        <div class="meta muted">Your generated content will appear here.</div>    
+       <div class="meta muted">Structured meeting output will appear here.</div>    
       </div>    
 
       <div class="toolbar" style="margin-top:8px">     
@@ -338,19 +336,19 @@ body.dark {
       </div>    
 
       <div class="footnote">
-        Tip: Try "poem about rain" or "letter: say sorry to sibling". Emotion slider controls intensity.
+        Tip: Paste raw discussion notes. Use Detail Level to control summary depth.
       </div>    
     </div>    
 
     <!-- Right panel: history -->    
     <aside class="history" aria-label="Recent history">    
-      <h3>Recent</h3>    
+      <h3>Recent Notes</h3>    
       <div id="historyList"></div>    
 
       <div style="margin-top:10px; display:flex; gap:8px">    
         <button class="ghost" id="clearHistory">Clear</button>    
         <div style="flex:1"></div>    
-        <div class="muted">Local only • private</div>    
+        <div class="muted">Stored locally • private</div>    
       </div>    
     </aside>    
 
@@ -358,7 +356,7 @@ body.dark {
 </div>
 <div id="dobOverlay" class="overlay" style="display: none;">
   <div class="dob-box">
-    <h3>Enter your Date of Birth</h3>
+    <h3>Enter Date of Birth</h3>
     <input type="date" id="dobInput" />
     <button id="dobSubmit">Continue</button>
   </div>
@@ -412,7 +410,8 @@ function validateAge() {
   const age = calculateAge(userDOB);
   isAdult = age >= 18;
 
-  const childModes = ["reflection", "journal", "note", "affirmation"];
+  const childModes = ["summary", "keypoints"];
+
 
   for (let option of modeEl.options) {
     if (!isAdult && !childModes.includes(option.value)) {
@@ -436,9 +435,10 @@ if (!userDOB) {
       // emotion label update  
       function updateEmotionLabel() {  
         const v = parseInt(emotionEl.value,10);  
-        if (v < 25) emotionLabel.textContent = "Soft";  
-        else if (v < 60) emotionLabel.textContent = "Balanced";  
-        else emotionLabel.textContent = "Deep";  
+        if (v < 25) emotionLabel.textContent = "Concise";
+else if (v < 60) emotionLabel.textContent = "Balanced";
+else emotionLabel.textContent = "Detailed";
+  
       }  
       emotionEl.addEventListener("input", updateEmotionLabel);  
       updateEmotionLabel();  
@@ -494,7 +494,7 @@ function emotionalHandwriteHTML(html, elementId, toneLevel = "medium") {
     typeNext();
 }
 
-function getToneFromEmotion(value) {
+function getDetailLevel(value){
   const num = Number(value);
 
   if (num <= 33) return "soft";
@@ -707,71 +707,46 @@ themeToggle.addEventListener("click", () => {
 });
 // All suggestion sets grouped by mode (SAFE H1 VERSION)
 const suggestionSets = {
-  reflection: [
-    "what I learned today",
-    "a moment that taught me something",
-    "something I understood better",
-    "a choice I made and why",
-    "what helped me stay calm"
+  summary: [
+    "Weekly team sync discussion",
+    "Project planning meeting",
+    "Sprint review discussion",
+    "Client feedback session",
+    "Internal strategy meeting"
   ],
 
-  journal: [
-    "today’s main moment",
-    "something that stood out",
-    "how my day went overall",
-    "what I focused on today",
-    "one thing I noticed today"
+  keypoints: [
+    "Budget allocation discussion",
+    "Feature prioritization debate",
+    "Marketing campaign planning",
+    "Hiring discussion notes",
+    "Technical architecture review"
   ],
 
-  note: [
-    "a simple reminder",
-    "something to improve slowly",
-    "a thought to remember",
-    "a small win today",
-    "a clear point to keep in mind"
+  action: [
+    "Assign next sprint tasks",
+    "Follow-up from client call",
+    "Deployment checklist items",
+    "Post-meeting task tracking",
+    "Release preparation tasks"
   ],
 
-  affirmation: [
-    "I can take things step by step",
-    "I am learning and improving",
-    "I can stay calm and focused",
-    "I trust myself to try",
-    "I am allowed to grow at my pace"
+  minutes: [
+    "Board meeting transcript",
+    "Quarterly performance review",
+    "Team standup notes",
+    "Cross-functional sync meeting",
+    "Product roadmap discussion"
   ],
 
-  poem: [
-    "a quiet evening scene",
-    "a calm moment in nature",
-    "simple light and shadow",
-    "a peaceful pause",
-    "a gentle passing moment"
-  ],
-
-  story: [
-    "a small turning point",
-    "a simple journey forward",
-    "a quiet change",
-    "a helpful encounter",
-    "a new beginning"
-  ],
-
-  letter: [
-    "a note to myself",
-    "a message for tomorrow",
-    "a short appreciation note",
-    "a kind message",
-    "a simple update"
-  ],
-
-  quote: [
-    "small steps matter",
-    "clarity comes with patience",
-    "progress is built daily",
-    "calm thinking helps decisions",
-    "consistency brings results"
+  brainstorm: [
+    "New product feature ideas",
+    "Cost reduction strategies",
+    "User engagement improvements",
+    "Growth experiment ideas",
+    "Automation opportunities"
   ]
 };
-
 
 // Mode selector + button handler
 document.getElementById("suggestBtn").addEventListener("click", () => {
