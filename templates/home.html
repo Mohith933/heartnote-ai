@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="icon" type="image/x-icon" href="{% static 'icons/favicon.ico' %}">
-  <title>NoteAI — AI-Powered Writing Assistant</title>
+  <title>NoteAI — AI-Powered Meeting Notes & Summarization</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="manifest" href="{% static 'pwa/manifest.json' %}">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#141414">
@@ -187,7 +187,7 @@
       background: var(--card);
       padding: 24px;
       border-radius: 14px;
-      box-shadow: 0 4px 12px rgba(255,77,109,0.12);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
       transition: transform 0.2s ease;
     }
     .feature:hover { transform: translateY(-6px); }
@@ -298,7 +298,7 @@
 
 <section class="hero" id="home">
   <h1>NoteAI — AI-Powered Writing Assistant</h1>
-  <p>NoteAI helps you generate structured, clear, and expressive content — from personal notes to social posts and professional reflections.</p>
+  <p>NoteAI transforms raw meeting discussions into structured summaries, key decisions, and clear action items — instantly and professionally.</p>
   <a href="{% url 'aiwrite' %}" class="hero-btn">Start Writing</a>
   <p class="helper-text">No signup required</p>
 </section>
@@ -307,16 +307,16 @@
   <h2>Why Use NoteAI</h2>
   <div class="features-grid">
     <div class="feature">
-      <h3>🎛 Tone Control</h3>
+      <h3>🎛 Structured Meeting Summaries</h3>
       <p>Adjust writing tone and intensity to match your intent — from casual notes to thoughtful reflections.</p>
     </div>
     <div class="feature">
-      <h3>✍ Natural Language Generation</h3>
-      <p>Generate human-like writing with structured flow, clarity, and contextual awareness.</p>
+      <h3>✍ Action Item Extraction</h3>
+      <p>Automatically identify tasks, responsibilities, and follow-ups.</p>
     </div>
     <div class="feature">
-      <h3>🔒 Private by Design</h3>
-      <p>Your content stays in your environment — no unnecessary data storage or external sharing.</p>
+      <h3>🔒Secure & Lightweight</h3>
+      <p>Minimal data storage with a clean, efficient architecture.</p>
     </div>
   </div>
 </section>
@@ -330,7 +330,7 @@
     </div>
     <div class="journey-step">
       <h3>AI Processing</h3>
-      <p>The system processes your input using a structured language model pipeline to generate coherent and context-aware content.</p>
+      <p>Paste meeting notes, transcript, or discussion points.</p>
     </div>
     <div class="journey-step">
       <h3>Generated Output</h3>
