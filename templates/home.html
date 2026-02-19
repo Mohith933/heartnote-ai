@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="icon" type="image/x-icon" href="{% static 'icons/favicon.ico' %}">
-  <title>MeetScribe AI — AI-Powered Meeting Notes & Summarization</title>
+  <title>HeartNote AI — Creative Writer</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="manifest" href="{% static 'pwa/manifest.json' %}">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#141414">
@@ -21,32 +21,20 @@
     }
 
     @media (prefers-color-scheme: dark) {
-     :root {
-  --accent: #2563eb;          /* professional blue */
-  --accent-dark: #1e40af;
-  --bg: #ffffff;
-  --text: #111827;
-  --card: #ffffff;
-  --muted: #f3f4f6;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0f172a;
-    --text: #f8fafc;
-    --card: #1e293b;
-    --muted: #111827;
-    --accent: #3b82f6;
-    --accent-dark: #2563eb;
-  }
-
-  body { background: var(--bg); color: var(--text); }
-  header { background: var(--card); border-bottom: 1px solid rgba(255,255,255,0.05); }
-  .feature { background: var(--card); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08); }
-  .journey-step { background: var(--muted); border-left: 6px solid var(--accent); }
-  footer { background: var(--accent-dark); }
-}
-
+      :root {
+        --bg: #0d0d0d;
+        --text: #f5f5f5;
+        --card: #1a1a1a;
+        --muted: #141414;
+        --accent: #ff668a;
+        --accent-dark: #ff4d6d;
+      }
+      body { background: var(--bg); color: var(--text); }
+      header { background: var(--card); border-bottom: 1px solid rgba(255,255,255,0.05); }
+      .feature { background: var(--card); box-shadow: 0 4px 12px rgba(255, 77, 109, 0.08); }
+      .journey-step { background: var(--muted); border-left: 6px solid var(--accent); }
+      footer { background: var(--accent-dark); }
+    }
 
     * {
       margin: 0;
@@ -187,7 +175,7 @@
       background: var(--card);
       padding: 24px;
       border-radius: 14px;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+      box-shadow: 0 4px 12px rgba(255,77,109,0.12);
       transition: transform 0.2s ease;
     }
     .feature:hover { transform: translateY(-6px); }
@@ -292,82 +280,75 @@
 <body>
 
   <header>
-  <div class="logo">📝 MeetScribe AI</div>
-  <button class="cta-btn" id="openSignup">Sign Up</button>
-</header>
+    <div class="logo">💞 HeartNote AI</div>
+    <button class="cta-btn" id="openSignup">Sign Up</button>
+  </header>
+  
+  <section class="hero" id="home">
+    <h1>HeartNote AI — Write From What Actually Happened.</h1>
+    <p>Describe a real moment. HeartNote transforms it into meaningful, deeply personal writing.</p>
+    <a href="{% url 'aiwrite' %}" class="hero-btn">Start With a Moment 💗</a>
+<p class="helper-text">No signup required</p>
+  </section>
 
-<section class="hero" id="home">
-  <h1>MeetScribe AI — AI-Powered Writing Assistant</h1>
-  <p>MeetScribe AI transforms raw meeting discussions into structured summaries, key decisions, and clear action items — instantly and professionally.</p>
-  <a href="{% url 'aiwrite' %}" class="hero-btn">Start Writing</a>
-  <p class="helper-text">No signup required</p>
-</section>
+  <section class="features" id="features">
+    <h2>Why It Feels Different</h2>
+    <div class="features-grid">
+      <div class="feature">
+        <h3>❤️ Memory Anchoring</h3>
+        <p>Write from specific moments, not generic feelings.</p>
+      </div>
+      <div class="feature">
+        <h3>🧠 Structured Emotion Input</h3>
+        <p>Guided prompts help you recall real events before writing.</p>
+      </div>
+      <div class="feature">
+        <h3>🔒 Private & Personal</h3>
+        <p>Your writings stay private to your account.</p>
+      </div>
+    </div>
+  </section>
 
-<section class="features" id="features">
-  <h2>Why Use MeetScribe AI</h2>
-  <div class="features-grid">
-    <div class="feature">
-      <h3>🎛 Structured Meeting Summaries</h3>
-      <p>Adjust writing tone and intensity to match your intent — from casual notes to thoughtful reflections.</p>
-    </div>
-    <div class="feature">
-      <h3>✍ Action Item Extraction</h3>
-      <p>Automatically identify tasks, responsibilities, and follow-ups.</p>
-    </div>
-    <div class="feature">
-      <h3>🔒Secure & Lightweight</h3>
-      <p>Minimal data storage with a clean, efficient architecture.</p>
-    </div>
-  </div>
-</section>
-
-<section class="journey" id="journey">
-  <h2>How MeetScribe AI Works</h2>
+  <section class="journey" id="journey">
+  <h2>Built for Real Moments 💫</h2>
   <div class="journey-timeline">
+    
     <div class="journey-step">
-      <h3>Input Your Idea</h3>
-      <p>Provide a topic, thought, or short prompt describing what you want to write.</p>
+      <h3>✨ H1 — Memory-Based Personal Writing</h3>
+      <p>HeartNote focuses on one thing — helping you transform real-life moments into deeply personal letters, reflections, and stories.</p>
     </div>
     <div class="journey-step">
-      <h3>AI Processing</h3>
-      <p>Paste meeting notes, transcript, or discussion points.</p>
-    </div>
-    <div class="journey-step">
-      <h3>Generated Output</h3>
-      <p>Receive refined, structured writing instantly, ready for editing, sharing, or saving.</p>
-    </div>
-    <div class="journey-step">
-      <h3>Private & Lightweight</h3>
-      <p>Designed with minimal data storage and a simple architecture focused on usability and performance.</p>
+      <h3>🚀 What’s Coming Next</h3>
+      <p>In the future, HeartNote will expand into social storytelling, visual expression, and emotional insight — all powered by real memories.</p>
     </div>
   </div>
 </section>
+  <footer>
+    <h3>HeartNote AI</h3>
+    <p>Writing shaped by real moments.</p>
+    <small>© 2025 HeartNote AI. All rights reserved.</small>
+  </footer>
 
-
-<footer>
-  <h3>MeetScribe AI</h3>
-  <p>AI-powered writing assistant for structured and expressive content.</p>
-  <small>© Designed & Developed by Mohith Sai.</small>
-</footer>
-
+  <!-- Signup Modal -->
 <!-- Signup Modal -->
 <div id="signupModal" class="modal">
   {%csrf_token%}
   <div class="modal-content">
     <span class="close" id="closeModal">&times;</span>
-    <h2>Create an Account</h2>
+    <h2>Create a space</h2>
     <label for="dob" class="dob-label">Username</label>
     <input type="text" id="username" placeholder="Username" required>
     <label for="dob" class="dob-label">Email</label>
     <input type="email" id="email" placeholder="Email" required>
-    <label for="dob" class="dob-label">Password</label>
+     <label for="dob" class="dob-label">Password</label>
     <input type="password" id="password" placeholder="Password" required>
 
+    <!-- New Date of Birth Field -->
     <label for="dob" class="dob-label">Date of Birth</label>
     <input type="date" id="dob" required>
 
     <button id="submitSignup">Sign Up</button>
-    <p>Session data may reset periodically.</p>
+<p>Your space may reset occasionally.</p>
   </div>
 </div>
 
