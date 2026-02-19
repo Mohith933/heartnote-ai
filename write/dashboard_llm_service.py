@@ -344,92 +344,92 @@ class Dashboard_LLM_Service:
         raw_lang = (language or "en").lower().strip()
         language = SUPPORTED_LANGUAGES.get(raw_lang, "English")
         tone = DEPTH_TONE.get(depth, DEPTH_TONE["light"])
-
-        # 1️⃣ Safety filter (ONLY for bad words / self-harm)
         safe, safe_message = self.safety_filter(desc)
         if not safe:
             return {
-                "response": safe_message,
-                "blocked": True,
-                "is_fallback":False
-            }
-
-        # 2️⃣ Template selection
+            "response": safe_message,
+            "blocked": True,
+            "is_fallback": False}
         template = self.get_template(mode)
         if not template:
             return {
-                "response": "This writing mode is not available right now.",
-                "blocked": False,
-                'is_fallback':True
-            }
-
-        # 3️⃣ Prompt build
+            "response": "This writing mode is not available right now.",
+            "blocked": False,
+            "is_fallback": True}
         date = datetime.now().strftime("%d/%m/%Y")
-
         try:
             prompt = template.format(
-                name=name,
-                desc=desc,
-                tone=tone,
-                depth=depth,
-                language=language,
-                date=date
-            )
+            name=name,
+            desc=desc,
+            tone=tone,
+            depth=depth,
+            language=language,
+            date=date)
         except Exception:
-            prompt = template.format(name=name, desc=desc, tone=tone,language=language)
-
+            prompt = template.format(
+            name=name,
+            desc=desc,
+            tone=tone,
+            language=language)
+        
         full_prompt = f"[LANG={language}]\n{prompt}"
-
-        # 4️⃣ Ollama call (GUARANTEED STRING RETURN)
         try:
             api_key = os.getenv("GEMINI_API_KEY")
             url = f"https://generativelanguage.googleapis.com/v1beta/models/{self.model}:generateContent?key={api_key}"
-            headers = {"Content-Type": "application/json"}
+            headers = {
+            "Content-Type": "application/json"}
             payload = {
-        "contents": [
-            {
-                "parts": [
-                    {"text": full_prompt}
-                ]
+            "contents": [
+                {
+                    "parts": [
+                        {"text": full_prompt}
+                    ]
+                }
+            ],
+            "generationConfig": {
+                "temperature": 0.6,
+                "topP": 0.9,
+                "maxOutputTokens": 400
+            }}
+            res = requests.post(url, headers=headers, json=payload, timeout=30)
+            res.raise_for_status()
+            data = res.json()
+            raw = data["candidates"][0]["content"]["parts"][0]["text"]
+            if not isinstance(raw, str) or not raw.strip():
+                return {
+                "response": (
+                    "The words feel quiet right now.\n\n"
+                    "Some feelings take a moment before they find language."
+                ),
+                "blocked": False,
+                "is_fallback": True
             }
-        ],
-        "generationConfig": {
-            "temperature": 0.6,
-            "topP": 0.9,
-            "maxOutputTokens": 400
-        }
-    }
-        
-    res = requests.post(url, headers=headers, json=payload, timeout=30)
-    res.raise_for_status()
-    data = res.json()
-    raw = data["candidates"][0]["content"]["parts"][0]["text"]
-
-    if not isinstance(raw, str) or not raw.strip():
-        return {
+            return {
+            "response": raw.strip(),
+            "blocked": False,
+            "is_fallback": False}
+        except requests.exceptions.HTTPError as e:
+            if e.response is not None and e.response.status_code == 429:
+                return {
+                "response": "⚠️ Too many requests. Please wait a moment and try again.",
+                "blocked": True,
+                "is_fallback": False}
+            return {
             "response": (
-                "The words feel quiet right now.\n\n"
-                "Some feelings take a moment before they find language."
+                "The thoughts are still forming.\n\n"
+                "Please try again in a moment."
             ),
             "blocked": False,
-            "is_fallback": True
-        }
+            "is_fallback": True}
+        except Exception:
+            return {
+            "response": (
+                "The thoughts are still forming.\n\n"
+                "Please try again in a moment."
+            ),
+            "blocked": False,
+            "is_fallback": True}
 
-    return {
-        "response": raw.strip(),
-        "blocked": False,
-        "is_fallback": False
-    }
-
-except Exception:
-    return {
-        "response": (
-            "The thoughts are still forming.\n\n"
-            "Please try again in a moment."
-        ),
-        "blocked": False,
-        "is_fallback": True
-    }
 
 
 
