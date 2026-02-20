@@ -60,7 +60,7 @@ Rules:
 - No advice or moral tone
 
 Start with:
-Dear {name},
+Dear You,
 """
 
 
@@ -98,59 +98,6 @@ Rules:
 - No moral or lesson
 
 Return only the story.
-"""
-
-
-
-DASHBOARD_QUOTE = """
-Write one emotional sentence in {language}.
-
-Inspired by:
-{name} — {desc}
-
-Rules:
-- Under 20 words
-- Simple and human
-- No advice or motivational tone
-
-Return only the sentence.
-"""
-
-
-
-DASHBOARD_AFFIRMATION = """
-Write a gentle affirmation in {language}.
-
-Inspired by:
-{name} — {desc}
-
-Rules:
-- 1–2 short lines
-- Present tense only (I am…, I feel…)
-- No advice
-- No future focus
-
-Return only the affirmation.
-"""
-
-
-
-DASHBOARD_NOTE = """
-Write a short reflective note in {language}.
-
-Feeling: {desc}
-
-Format exactly:
-
-• What you felt: ...
-• Why it happened: ...
-• What could help: ...
-
-Rules:
-- Neutral tone
-- No advice
-- Simple language
-- No extra text
 """
 
 
@@ -240,7 +187,7 @@ class Dashboard_LLM_Service:
             "generationConfig": {
                 "temperature": 0.6,
                 "topP": 0.9,
-                "maxOutputTokens": 500
+                "maxOutputTokens": 350
             }}
             res = requests.post(url, headers=headers, json=payload, timeout=30)
             res.raise_for_status()
@@ -293,10 +240,7 @@ class Dashboard_LLM_Service:
             "letters": DASHBOARD_LETTER,
             "poems": DASHBOARD_POEM,
             "story": DASHBOARD_STORY,
-            "quotes": DASHBOARD_QUOTE,
-            "affirmation": DASHBOARD_AFFIRMATION,
-            "notes": DASHBOARD_NOTE,
-            "journal": DASHBOARD_JOURNAL,
+            "journal": DASHBOARD_JOURNAL
         }.get(mode)
 
     # -------------------------------------------------
